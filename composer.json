@@ -12,9 +12,9 @@
         "routes",
         "i18n",
         "localization",
-        "translation"
+        "translation",
         "intl",
-        "internationalization",
+        "internationalization"
     ],
     "authors": [
         {

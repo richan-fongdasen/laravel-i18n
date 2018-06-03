@@ -198,7 +198,7 @@ class TranslateableTraitTests extends DatabaseTestCase
     {
         \App::setLocale('es');
 
-        $statement = "DELETE FROM `product_translations` WHERE `product_id`=5 AND `locale`='es' LIMIT 1";
+        $statement = "DELETE FROM `product_translations` WHERE `product_id`=5 AND `locale`='es'";
         \DB::delete($statement);
 
         $product = Product::find(5);

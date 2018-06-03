@@ -1,0 +1,50 @@
+language: php
+sudo: false
+dist: trusty
+
+matrix:
+  fast_finish: true
+  include:
+    - php: 5.5.9
+      env: LARAVEL=5.1.35 ORCHESTRA=3.1.*
+    - php: 5.5.9
+      env: LARAVEL=5.2.* ORCHESTRA=3.2.*
+    - php: 5.6
+      env: LARAVEL=5.3.* ORCHESTRA=3.3.*
+    - php: 5.6
+      env: LARAVEL=5.4.* ORCHESTRA=3.4.*
+    - php: 7.0
+      env: LARAVEL=5.5.* ORCHESTRA=3.5.* COVERAGE=1
+    - php: 7.1
+      env: LARAVEL=5.6.* ORCHESTRA=3.6.*
+    - php: 7.2
+      env: LARAVEL=5.6.* ORCHESTRA=3.6.*
+    - php: hhvm
+      env: HHVM=1 LARAVEL=5.4.* ORCHESTRA=3.4.*
+
+  allow_failures:
+    - env: COVERAGE=1
+    - php: hhvm
+
+before_install:
+  - if [[ $TRAVIS_PHP_VERSION != 7.1 ]] && [[ $TRAVIS_PHP_VERSION != hhvm ]] ; then phpenv config-rm xdebug.ini; fi
+  - travis_retry composer self-update
+
+before_script:
+  - if [[ -v LARAVEL ]]; then composer require laravel/framework:$LARAVEL --no-update; fi
+  - if [[ -v ORCHESTRA ]]; then composer require orchestra/testbench:$ORCHESTRA --no-update; fi
+  - if [[ -v ORCHESTRA ]]; then composer require orchestra/database:$ORCHESTRA --no-update; fi
+
+  - travis_retry composer install --no-interaction --prefer-source
+  - phpenv rehash
+  - set +H
+
+script:
+  - vendor/bin/phpunit
+  - if [[ $COVERAGE = '1' ]]; then phpdbg -qrr vendor/bin/phpunit --coverage-clover=clover.xml; fi
+
+after_script:
+  - if [[ $COVERAGE = '1' ]]; then bash <(curl -s https://codecov.io/bash); fi
+
+notifications:
+  email: false

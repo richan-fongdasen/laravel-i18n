@@ -10,7 +10,7 @@ use RichanFongdasen\I18n\Repositories\JsonRepository;
 class RepositoryManager extends Manager
 {
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param \Illuminate\Foundation\Application $app
      */
@@ -20,7 +20,7 @@ class RepositoryManager extends Manager
     }
 
     /**
-     * Create database repository
+     * Create database repository.
      *
      * @return \RichanFongdasen\I18n\Repositories\DatabaseRepository
      */
@@ -30,7 +30,7 @@ class RepositoryManager extends Manager
     }
 
     /**
-     * Create json repository
+     * Create json repository.
      *
      * @return \RichanFongdasen\I18n\Repositories\JsonRepository
      */
@@ -40,15 +40,15 @@ class RepositoryManager extends Manager
     }
 
     /**
-     * Get language datasource
+     * Get language datasource.
      *
      * @return string
      */
     protected function getDatasource()
     {
-        return $this->app['config']["i18n.language_datasource"];
+        return $this->app['config']['i18n.language_datasource'];
     }
-    
+
     /**
      * Get the default driver name.
      *
@@ -56,6 +56,6 @@ class RepositoryManager extends Manager
      */
     public function getDefaultDriver()
     {
-        return $this->app['config']["i18n.driver"];
+        return $this->app['config']['i18n.driver'];
     }
 }

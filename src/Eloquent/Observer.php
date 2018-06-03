@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 class Observer
 {
     /**
-     * Check if the translation model is dirty
+     * Check if the translation model is dirty.
      *
-     * @param  \RichanFongdasen\I18n\Eloquent\TranslationModel $model
-     * @return boolean
+     * @param \RichanFongdasen\I18n\Eloquent\TranslationModel $model
+     *
+     * @return bool
      */
     protected function isDirty(TranslationModel $model)
     {

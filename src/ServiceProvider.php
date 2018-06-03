@@ -14,15 +14,15 @@ class ServiceProvider extends Provider
     public function boot()
     {
         $this->publishes([
-            realpath(__DIR__ . '/../config/i18n.php') => config_path('i18n.php')
+            realpath(__DIR__.'/../config/i18n.php') => config_path('i18n.php'),
         ], 'config');
 
         $this->publishes([
-            realpath(__DIR__ . '/../database/migrations/') => database_path('migrations')
+            realpath(__DIR__.'/../database/migrations/') => database_path('migrations'),
         ], 'migrations');
 
         $this->publishes([
-            realpath(__DIR__ . '/../storage/i18n/') => storage_path('i18n')
+            realpath(__DIR__.'/../storage/i18n/') => storage_path('i18n'),
         ], 'languages.json');
     }
 
@@ -33,7 +33,7 @@ class ServiceProvider extends Provider
      */
     public function register()
     {
-        $this->mergeConfigFrom(realpath(__DIR__ . '/../config/i18n.php'), 'i18n');
+        $this->mergeConfigFrom(realpath(__DIR__.'/../config/i18n.php'), 'i18n');
 
         $this->app->singleton(I18nService::class, function () {
             return new I18nService(request());

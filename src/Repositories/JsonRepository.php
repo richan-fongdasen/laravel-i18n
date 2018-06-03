@@ -5,7 +5,7 @@ namespace RichanFongdasen\I18n\Repositories;
 class JsonRepository extends Repository
 {
     /**
-     * Read the json datasource
+     * Read the json datasource.
      *
      * @return array
      */

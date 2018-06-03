@@ -9,9 +9,10 @@ class BrowserNegotiator implements LanguageNegotiator
 {
     /**
      * Determine the user preferred locale by reading
-     * the browser languages
+     * the browser languages.
      *
      * @param \Illuminate\Http\Request $request
+     *
      * @return \RichanFongdasen\I18n\Locale
      */
     public function preferredLocale(Request $request)

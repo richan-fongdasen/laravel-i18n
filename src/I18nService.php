@@ -9,49 +9,49 @@ use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
 class I18nService
 {
     /**
-     * I18n configuration
+     * I18n configuration.
      *
      * @var array
      */
     protected $config;
 
     /**
-     * Default locale key
+     * Default locale key.
      *
      * @var string
      */
     protected $defaultKey;
 
     /**
-     * Locale collection object
+     * Locale collection object.
      *
      * @var \Illuminate\Support\Collection
      */
     protected $locale;
 
     /**
-     * All of possible locale keys
+     * All of possible locale keys.
      *
      * @var array
      */
     protected $possibleKeys = ['ietfCode', 'language'];
 
     /**
-     * HTTP Request Object
+     * HTTP Request Object.
      *
      * @var \Illuminate\Http\Request
      */
     protected $request;
 
     /**
-     * URL Generator object
+     * URL Generator object.
      *
      * @var \RichanFongdasen\I18n\UrlGenerator
      */
     protected $urlGenerator;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param \Illuminate\Http\Request $request
      */
@@ -59,7 +59,7 @@ class I18nService
     {
         $this->request = $request;
         $this->loadConfig();
-        
+
         $this->defaultKey = $this->getConfig('language_key');
 
         $this->locale = $this->loadLocale();
@@ -68,7 +68,7 @@ class I18nService
     }
 
     /**
-     * Get default locale
+     * Get default locale.
      *
      * @return \RichanFongdasen\I18n\Locale
      */
@@ -77,7 +77,7 @@ class I18nService
         $fallback = $this->getConfig('fallback_language');
         $locale = $this->getLocale($fallback);
 
-        if (! $locale instanceof Locale) {
+        if (!$locale instanceof Locale) {
             throw new InvalidFallbackLanguageException('Can\'t find the fallback locale object');
         }
 
@@ -85,9 +85,10 @@ class I18nService
     }
 
     /**
-     * Format the IETF locale string
+     * Format the IETF locale string.
      *
-     * @param  string $string
+     * @param string $string
+     *
      * @return string
      */
     protected function formatIetf($string)
@@ -96,10 +97,11 @@ class I18nService
     }
 
     /**
-     * Get configuration value for a specific key
+     * Get configuration value for a specific key.
      *
-     * @param  string $key
-     * @param  mixed $default
+     * @param string $key
+     * @param mixed  $default
+     *
      * @return mixed
      */
     public function getConfig($key, $default = null)
@@ -112,7 +114,8 @@ class I18nService
      * It will return all available locales when
      * there is no keyword.
      *
-     * @param  string $keyword
+     * @param string $keyword
+     *
      * @return mixed
      */
     public function getLocale($keyword = null)
@@ -127,13 +130,15 @@ class I18nService
                 return $locale;
             }
         }
+
         return null;
     }
 
     /**
-     * Get all of available locale keys
+     * Get all of available locale keys.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return \Illuminate\Support\Collection
      */
     public function getLocaleKeys($key = null)
@@ -156,13 +161,13 @@ class I18nService
     }
 
     /**
-     * Load locale from repository
+     * Load locale from repository.
      *
      * @return void
      */
     protected function loadLocale()
     {
-        $cacheKey = 'laravel-i18n-locale-' . $this->getConfig('driver');
+        $cacheKey = 'laravel-i18n-locale-'.$this->getConfig('driver');
         $cacheDuration = $this->getConfig('cache_duration', 1440);
 
         return \Cache::remember($cacheKey, $cacheDuration, function () {
@@ -171,9 +176,10 @@ class I18nService
     }
 
     /**
-     * Get the current routed locale
+     * Get the current routed locale.
      *
-     * @param  \Illuminate\Http\Request $request
+     * @param \Illuminate\Http\Request $request
+     *
      * @return \RichanFongdasen\I18n\Locale|null
      */
     public function routedLocale(Request $request = null)
@@ -186,11 +192,12 @@ class I18nService
         if ($locale = $this->getLocale($language)) {
             \App::setLocale($locale->{$this->defaultKey});
         }
+
         return $locale;
     }
 
     /**
-     * Get the route prefix
+     * Get the route prefix.
      *
      * @return string
      */
@@ -204,8 +211,9 @@ class I18nService
     /**
      * Generate a localized URL for the application.
      *
-     * @param  string $url
-     * @param  mixed  $locale
+     * @param string $url
+     * @param mixed  $locale
+     *
      * @return string
      */
     public function url($url, $locale = null)

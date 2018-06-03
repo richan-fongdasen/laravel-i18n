@@ -23,14 +23,14 @@ trait TranslateableTrait
     protected $fallbackTranslation;
 
     /**
-     * Current selected locale
+     * Current selected locale.
      *
      * @var \RichanFongdasen\I18n\Locale
      */
     protected $locale;
 
     /**
-     * Default language key
+     * Default language key.
      *
      * @var string
      */
@@ -38,7 +38,7 @@ trait TranslateableTrait
 
     /**
      * Translation object for the current selected
-     * locale
+     * locale.
      *
      * @var \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
@@ -67,7 +67,7 @@ trait TranslateableTrait
      */
     public static function bootTranslateableTrait()
     {
-        static::addGlobalScope(new TranslationScope);
+        static::addGlobalScope(new TranslationScope());
         static::observe(app(Observer::class));
         static::$localeKey = \I18n::getConfig('language_key');
     }
@@ -75,16 +75,17 @@ trait TranslateableTrait
     /**
      * Create a new translation for the given locale.
      *
-     * @param  \RichanFongdasen\I18n\Locale $locale
+     * @param \RichanFongdasen\I18n\Locale $locale
+     *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
     protected function createTranslation(Locale $locale)
     {
         $conditions = [
             $this->getForeignKey() => $this->getKey(),
-            'locale' => $locale->{self::$localeKey}
+            'locale'               => $locale->{self::$localeKey},
         ];
-        
+
         $model = (new TranslationModel())
             ->fill($conditions);
 
@@ -100,7 +101,8 @@ trait TranslateableTrait
     /**
      * Fill the model with an array of attributes.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return $this
      */
     public function fill(array $attributes)
@@ -110,13 +112,15 @@ trait TranslateableTrait
                 $this->setTranslateableAttribute($key, $attributes[$key]);
             }
         }
+
         return parent::fill($attributes);
     }
 
     /**
      * Get an attribute from the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttribute($key)
@@ -124,27 +128,28 @@ trait TranslateableTrait
         if ($this->isTranslateableAttribute($key)) {
             return $this->getTranslated($key);
         }
+
         return parent::getAttribute($key);
     }
 
     /**
-     * Get join table attributes
+     * Get join table attributes.
      *
      * @return array
      */
     protected function getJoinAttributes()
     {
-        $attributes = [$this->getTable() . '.*'];
+        $attributes = [$this->getTable().'.*'];
 
         foreach ($this->getTranslateableAttributes() as $attribute) {
-            $attributes[] = $this->getTranslationTable() . '.' . $attribute;
+            $attributes[] = $this->getTranslationTable().'.'.$attribute;
         }
 
         return $attributes;
     }
 
     /**
-     * Get all of translateable attributes
+     * Get all of translateable attributes.
      *
      * @return array
      */
@@ -157,7 +162,8 @@ trait TranslateableTrait
      * Get a translated attribute value from
      * the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     protected function getTranslated($key)
@@ -169,6 +175,7 @@ trait TranslateableTrait
         if ($result = $this->getTranslatedValue($this->translation, $key)) {
             return $result;
         }
+
         return $this->getTranslatedValue($this->fallbackTranslation, $key);
     }
 
@@ -176,8 +183,9 @@ trait TranslateableTrait
      * Get a translated attribute value from
      * the given translation model.
      *
-     * @param  mixed $translation
-     * @param  string $key
+     * @param mixed  $translation
+     * @param string $key
+     *
      * @return mixed
      */
     protected function getTranslatedValue($translation, $key)
@@ -185,6 +193,7 @@ trait TranslateableTrait
         if (!$translation instanceof Model) {
             return null;
         }
+
         return $translation->getAttribute($key);
     }
 
@@ -192,7 +201,8 @@ trait TranslateableTrait
      * Get existing translation or create a
      * new one.
      *
-     * @param  \RichanFongdasen\I18n\Locale $locale
+     * @param \RichanFongdasen\I18n\Locale $locale
+     *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
     protected function getTranslation(Locale $locale)
@@ -210,7 +220,8 @@ trait TranslateableTrait
      * Find locale object based on the given
      * key value.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return \RichanFongdasen\I18n\Locale
      */
     protected function getTranslationLocale($key = null)
@@ -226,11 +237,12 @@ trait TranslateableTrait
         if (!$locale = \I18n::getLocale($key)) {
             $locale = \I18n::defaultLocale();
         }
+
         return $locale;
     }
 
     /**
-     * Get translation table
+     * Get translation table.
      *
      * @return string
      */
@@ -238,7 +250,8 @@ trait TranslateableTrait
     {
         if (!isset($this->translationTable)) {
             $suffix = \I18n::getConfig('translation_table_suffix');
-            return Str::snake(class_basename($this)) . '_' . $suffix;
+
+            return Str::snake(class_basename($this)).'_'.$suffix;
         }
 
         return $this->translationTable;
@@ -248,8 +261,9 @@ trait TranslateableTrait
      * Check whether the given attribute key is
      * translateable.
      *
-     * @param  string  $key
-     * @return boolean
+     * @param string $key
+     *
+     * @return bool
      */
     protected function isTranslateableAttribute($key)
     {
@@ -262,7 +276,8 @@ trait TranslateableTrait
      * Add and additional scope to join the translation table
      * and make the translation content more easier to search.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeJoinTranslation(Builder $query)
@@ -271,18 +286,19 @@ trait TranslateableTrait
 
         return $query->leftJoin(
             $this->getTranslationTable(),
-            $this->getTable() . '.' . $this->getKeyName(),
+            $this->getTable().'.'.$this->getKeyName(),
             '=',
-            $this->getTranslationTable() . '.' . $this->getForeignKey()
+            $this->getTranslationTable().'.'.$this->getForeignKey()
         )->select($attributes)
-        ->where($this->getTranslationTable() . '.locale', \App::getLocale());
+        ->where($this->getTranslationTable().'.locale', \App::getLocale());
     }
 
     /**
      * Set a given attribute on the model.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return $this
      */
     public function setAttribute($key, $value)
@@ -300,6 +316,7 @@ trait TranslateableTrait
 
             return $this;
         }
+
         return parent::setAttribute($key, $value);
     }
 
@@ -319,8 +336,9 @@ trait TranslateableTrait
      * given key.
      *
      * @param string $key
-     * @param mixed $data
-     * @param mixed $locale
+     * @param mixed  $data
+     * @param mixed  $locale
+     *
      * @return $this
      */
     protected function setTranslateableAttribute($key, $data, $locale = null)
@@ -329,6 +347,7 @@ trait TranslateableTrait
             foreach ($data as $language => $value) {
                 $this->setTranslateableAttribute($key, $value, $language);
             }
+
             return $this;
         }
         if (!$locale && $this->locale) {
@@ -341,9 +360,10 @@ trait TranslateableTrait
     }
 
     /**
-     * Translate current model
+     * Translate current model.
      *
-     * @param  string $key
+     * @param string $key
+     *
      * @return \Illuminate\Database\Eloquent\Model
      */
     public function translate($key = null)

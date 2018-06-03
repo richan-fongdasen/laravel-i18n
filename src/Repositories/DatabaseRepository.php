@@ -5,7 +5,7 @@ namespace RichanFongdasen\I18n\Repositories;
 class DatabaseRepository extends Repository
 {
     /**
-     * Read the datasource
+     * Read the datasource.
      *
      * @return \Illuminate\Support\Collection
      */

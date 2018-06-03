@@ -8,17 +8,17 @@ class TranslationModel extends Model
 {
     /**
      * Enable mass assignment for this
-     * model
+     * model.
      *
-     * @var boolean
+     * @var bool
      */
     protected static $unguarded = true;
 
     /**
      * Disable timestamp in any translation
-     * model
+     * model.
      *
-     * @var boolean
+     * @var bool
      */
     public $timestamps = false;
 }

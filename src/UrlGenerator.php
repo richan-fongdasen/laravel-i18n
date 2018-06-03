@@ -5,7 +5,7 @@ namespace RichanFongdasen\I18n;
 class UrlGenerator
 {
     /**
-     * URL scheme, ie: https://
+     * URL scheme, ie: https://.
      *
      * @var string
      */
@@ -13,7 +13,7 @@ class UrlGenerator
 
     /**
      * Basic HTTP Authentication
-     * User information
+     * User information.
      *
      * @var string
      */
@@ -21,56 +21,56 @@ class UrlGenerator
 
     /**
      * Basic HTTP Authentication
-     * Password information
+     * Password information.
      *
      * @var string
      */
     protected $pass;
 
     /**
-     * Hostname
+     * Hostname.
      *
      * @var string
      */
     protected $host;
 
     /**
-     * HTTP port number
+     * HTTP port number.
      *
      * @var string
      */
     protected $port;
 
     /**
-     * Request path
+     * Request path.
      *
      * @var string
      */
     protected $path;
 
     /**
-     * Query string
+     * Query string.
      *
      * @var string
      */
     protected $query;
 
     /**
-     * Fragment identifyer
+     * Fragment identifyer.
      *
      * @var string
      */
     protected $fragment;
 
     /**
-     * Default language key
+     * Default language key.
      *
      * @var string
      */
     protected $key;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param string $key
      */
@@ -83,15 +83,16 @@ class UrlGenerator
      * Localize parsed URL based on the given
      * locale object.
      *
-     * @param  \RichanFongdasen\I18n\Locale $locale
+     * @param \RichanFongdasen\I18n\Locale $locale
+     *
      * @return string
      */
     public function localize(Locale $locale)
     {
-        $this->path = '/' . $locale->{$this->key} . $this->path;
+        $this->path = '/'.$locale->{$this->key}.$this->path;
 
-        return $this->scheme . $this->user . $this->pass . $this->host .
-            $this->port . $this->path . $this->query . $this->fragment;
+        return $this->scheme.$this->user.$this->pass.$this->host.
+            $this->port.$this->path.$this->query.$this->fragment;
     }
 
     /**
@@ -128,15 +129,16 @@ class UrlGenerator
      * Extract URL information and format it
      * to fit our needs.
      *
-     * @param array $url
+     * @param array  $url
      * @param string $key
      * @param string $default
      * @param string $prefix
      * @param string $suffix
-     * @return  string
+     *
+     * @return string
      */
     private function extract($url, $key, $default = '', $prefix = '', $suffix = '')
     {
-        return isset($url[$key]) ? $prefix . $url[$key] . $suffix : $default;
+        return isset($url[$key]) ? $prefix.$url[$key].$suffix : $default;
     }
 }

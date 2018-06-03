@@ -7,14 +7,14 @@ use RichanFongdasen\I18n\Locale;
 abstract class Repository
 {
     /**
-     * Language data source
+     * Language data source.
      *
      * @var string
      */
     protected $datasource;
 
     /**
-     * Class constructor
+     * Class constructor.
      *
      * @param string $datasource
      */
@@ -24,7 +24,7 @@ abstract class Repository
     }
 
     /**
-     * Get language collection
+     * Get language collection.
      *
      * @return \Illuminate\Support\Collection
      */
@@ -43,7 +43,7 @@ abstract class Repository
     }
 
     /**
-     * Read the datasource
+     * Read the datasource.
      *
      * @return mixed
      */

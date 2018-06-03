@@ -139,6 +139,9 @@ class UrlGenerator
      */
     private function extract($url, $key, $default = '', $prefix = '', $suffix = '')
     {
+        if (!$url) {
+            return $default;
+        }
         return isset($url[$key]) ? $prefix.$url[$key].$suffix : $default;
     }
 }

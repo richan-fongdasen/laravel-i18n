@@ -114,7 +114,7 @@ class I18nService
      * It will return all available locales when
      * there is no keyword.
      *
-     * @param string $keyword
+     * @param string|null $keyword
      *
      * @return mixed
      */
@@ -137,13 +137,13 @@ class I18nService
     /**
      * Get all of available locale keys.
      *
-     * @param string $key
+     * @param string|null $key
      *
-     * @return \Illuminate\Support\Collection
+     * @return null|\Illuminate\Support\Collection
      */
     public function getLocaleKeys($key = null)
     {
-        if (!$key) {
+        if (empty($key)) {
             $key = $this->defaultKey;
         }
         $keys = $this->locale->keyBy($key)->keys()->all();
@@ -163,7 +163,7 @@ class I18nService
     /**
      * Load locale from repository.
      *
-     * @return void
+     * @return \Illuminate\Support\Collection
      */
     protected function loadLocale()
     {
@@ -178,7 +178,7 @@ class I18nService
     /**
      * Get the current routed locale.
      *
-     * @param \Illuminate\Http\Request $request
+     * @param null|\Illuminate\Http\Request $request
      *
      * @return \RichanFongdasen\I18n\Locale|null
      */

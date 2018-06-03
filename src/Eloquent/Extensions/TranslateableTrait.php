@@ -135,7 +135,7 @@ trait TranslateableTrait
     /**
      * Get join table attributes.
      *
-     * @return array
+     * @return string[]
      */
     protected function getJoinAttributes()
     {
@@ -220,7 +220,7 @@ trait TranslateableTrait
      * Find locale object based on the given
      * key value.
      *
-     * @param string $key
+     * @param mixed $key
      *
      * @return \RichanFongdasen\I18n\Locale
      */
@@ -230,7 +230,7 @@ trait TranslateableTrait
             return $key;
         }
 
-        if (!$key) {
+        if (empty($key)) {
             $key = \App::getLocale();
         }
 
@@ -307,7 +307,7 @@ trait TranslateableTrait
             if (!$this->locale) {
                 $this->translate();
             }
-            if (!$this->translation instanceof TranslateModel) {
+            if (!$this->translation instanceof TranslationModel) {
                 $this->translation = $this->getTranslation($this->locale);
             }
 
@@ -362,9 +362,9 @@ trait TranslateableTrait
     /**
      * Translate current model.
      *
-     * @param string $key
+     * @param mixed $key
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return $this
      */
     public function translate($key = null)
     {
@@ -398,4 +398,39 @@ trait TranslateableTrait
             $this->getKeyName()
         );
     }
+
+    /**
+     * Get the default foreign key name for the model.
+     *
+     * @return string
+     */
+    abstract public function getForeignKey();
+
+    /**
+     * Get the value of the model's primary key.
+     *
+     * @return mixed
+     */
+    abstract public function getKey();
+
+    /**
+     * Get the primary key for the model.
+     *
+     * @return string
+     */
+    abstract public function getKeyName();
+
+    /**
+     * Get the table associated with the model.
+     *
+     * @return string
+     */
+    abstract public function getTable();
+
+    /**
+     * Update the creation and update timestamps.
+     *
+     * @return void
+     */
+    abstract protected function updateTimestamps();
 }

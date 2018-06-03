@@ -414,6 +414,13 @@ trait TranslateableTrait
     abstract public function getKey();
 
     /**
+     * Get the primary key for the model.
+     *
+     * @return string
+     */
+    abstract public function getKeyName();
+
+    /**
      * Get the table associated with the model.
      *
      * @return string

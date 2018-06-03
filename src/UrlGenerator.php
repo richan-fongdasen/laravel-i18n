@@ -129,7 +129,7 @@ class UrlGenerator
      * Extract URL information and format it
      * to fit our needs.
      *
-     * @param array  $url
+     * @param mixed  $url
      * @param string $key
      * @param string $default
      * @param string $prefix
@@ -139,7 +139,7 @@ class UrlGenerator
      */
     private function extract($url, $key, $default = '', $prefix = '', $suffix = '')
     {
-        if (!$url) {
+        if (empty($url)) {
             return $default;
         }
 

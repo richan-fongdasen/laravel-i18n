@@ -139,7 +139,7 @@ class I18nService
      *
      * @param string|null $key
      *
-     * @return null|string[]
+     * @return null|array<String>
      */
     public function getLocaleKeys($key = null)
     {

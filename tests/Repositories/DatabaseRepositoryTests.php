@@ -22,10 +22,12 @@ class DatabaseRepositoryTests extends TestCase
     {
         parent::setUp();
 
+        $now = date('Y-m-d H:i:s');
+
         \DB::table('languages')->insert([
-            ['name' => 'Spanish', 'language' => 'es', 'country' => 'ES', 'order' => 2],
-            ['name' => 'English', 'language' => 'en', 'country' => 'US', 'order' => 1],
-            ['name' => 'German', 'language' => 'de', 'country' => 'De', 'order' => 3],
+            ['name' => 'Spanish', 'language' => 'es', 'country' => 'ES', 'order' => 2, 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'English', 'language' => 'en', 'country' => 'US', 'order' => 1, 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'German', 'language' => 'de', 'country' => 'De', 'order' => 3, 'created_at' => $now, 'updated_at' => $now],
         ]);
 
         $this->repository = new DatabaseRepository('languages');

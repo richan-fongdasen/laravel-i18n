@@ -142,7 +142,7 @@ class UrlGenerator
         if (empty($url)) {
             return $default;
         }
-        
+
         return isset($url[$key]) ? $prefix.$url[$key].$suffix : $default;
     }
 }

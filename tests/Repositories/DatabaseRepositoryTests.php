@@ -36,17 +36,17 @@ class DatabaseRepositoryTests extends TestCase
     {
         $collection = $this->invokeMethod($this->repository, 'read');
 
-        $lang = $collection->pop();
+        $lang = $collection[2];
         $this->assertEquals('3', $lang->id);
         $this->assertEquals('3', $lang->order);
         $this->assertEquals('de', $lang->language);
 
-        $lang = $collection->pop();
+        $lang = $collection[1];
         $this->assertEquals('1', $lang->id);
         $this->assertEquals('2', $lang->order);
         $this->assertEquals('es', $lang->language);
 
-        $lang = $collection->pop();
+        $lang = $collection[0];
         $this->assertEquals('2', $lang->id);
         $this->assertEquals('1', $lang->order);
         $this->assertEquals('en', $lang->language);

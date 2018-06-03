@@ -3,6 +3,7 @@
 namespace RichanFongdasen\I18n\Tests\Eloquent\Extensions;
 
 use Illuminate\Database\Query\JoinClause;
+use Illuminate\Support\Collection;
 use RichanFongdasen\I18n\Eloquent\TranslationModel;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Tests\DatabaseTestCase;
@@ -478,7 +479,13 @@ class TranslateableTraitTests extends DatabaseTestCase
 
         $actual = $product->translations;
 
-        for ($i = 0; $i < $expected->count(); $i++) {
+        if ($expected instanceof Collection) {
+            $count = $expected->count();
+        } else {
+            $count = count($expected);
+        }
+
+        for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($expected[$i]->id, $actual[$i]->id);
             $this->assertEquals($expected[$i]->title, $actual[$i]->title);
             $this->assertEquals($expected[$i]->description, $actual[$i]->description);

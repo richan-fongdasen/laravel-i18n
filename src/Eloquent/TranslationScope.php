@@ -28,10 +28,10 @@ class TranslationScope implements ScopeInterface
     /**
      * We don't intend to remove this global scope, but
      * we need to implement this method regarding to
-     * \Illuminate\Database\Eloquent\ScopeInterface
+     * \Illuminate\Database\Eloquent\ScopeInterface.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder  $builder
-     * @param  \Illuminate\Database\Eloquent\Model  $model
+     * @param \Illuminate\Database\Eloquent\Builder $builder
+     * @param \Illuminate\Database\Eloquent\Model   $model
      *
      * @return void
      */

@@ -192,7 +192,12 @@ class I18nService
         if (!$request) {
             $request = $this->request;
         }
-        $language = $request->segment(1);
+
+        $index = $this->getConfig('locale_url_segment');
+        $language = $request->segment($index);
+        if (empty($language)) {
+            return null;
+        }
 
         if ($locale = $this->getLocale($language)) {
             \App::setLocale($locale->{$this->defaultKey});

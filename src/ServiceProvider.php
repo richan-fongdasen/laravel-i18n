@@ -2,6 +2,8 @@
 
 namespace RichanFongdasen\I18n;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as Provider;
 
 class ServiceProvider extends Provider
@@ -24,6 +26,14 @@ class ServiceProvider extends Provider
         $this->publishes([
             realpath(__DIR__.'/../storage/i18n/') => storage_path('i18n'),
         ], 'languages.json');
+
+        Collection::macro('translate', function ($locale) {
+            $this->each(function ($item, $key) use ($locale) {
+                if (($item instanceof Model) && method_exists($item, 'translate')) {
+                    $item->translate($locale);
+                }
+            });
+        });
     }
 
     /**

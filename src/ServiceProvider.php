@@ -32,6 +32,7 @@ class ServiceProvider extends Provider
                 if (($item instanceof Model) && method_exists($item, 'translate')) {
                     $item->translate($locale);
                 }
+
                 return $key;
             });
         });

@@ -156,7 +156,7 @@ class I18nService
     }
 
     /**
-     * Load I18n configurations
+     * Load I18n configurations.
      *
      * @return void
      */
@@ -237,5 +237,4 @@ class I18nService
 
         return $this->urlGenerator->setUrl($url)->localize($locale);
     }
-
 }

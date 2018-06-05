@@ -2,6 +2,8 @@
 
 namespace RichanFongdasen\I18n;
 
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as Provider;
 
 class ServiceProvider extends Provider
@@ -12,6 +14,17 @@ class ServiceProvider extends Provider
      * @return void
      */
     public function boot()
+    {
+        $this->publishAssets();
+        $this->registerMacro();
+    }
+
+    /**
+     * Publish package assets.
+     *
+     * @return void
+     */
+    protected function publishAssets()
     {
         $this->publishes([
             realpath(__DIR__.'/../config/i18n.php') => config_path('i18n.php'),
@@ -37,6 +50,24 @@ class ServiceProvider extends Provider
 
         $this->app->singleton(I18nService::class, function () {
             return new I18nService(request());
+        });
+    }
+
+    /**
+     * Register macro for Collection class.
+     *
+     * @return void
+     */
+    protected function registerMacro()
+    {
+        Collection::macro('translate', function ($locale) {
+            $this->each(function ($item, $key) use ($locale) {
+                if (($item instanceof Model) && method_exists($item, 'translate')) {
+                    $item->translate($locale);
+                }
+
+                return $key;
+            });
         });
     }
 }

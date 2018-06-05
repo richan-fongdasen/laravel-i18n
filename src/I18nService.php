@@ -155,7 +155,12 @@ class I18nService
         return $keys;
     }
 
-    protected function loadConfig()
+    /**
+     * Load I18n configurations.
+     *
+     * @return void
+     */
+    public function loadConfig()
     {
         $this->config = \Config::get('i18n');
     }
@@ -187,7 +192,12 @@ class I18nService
         if (!$request) {
             $request = $this->request;
         }
-        $language = $request->segment(1);
+
+        $index = $this->getConfig('locale_url_segment');
+        $language = $request->segment($index);
+        if (empty($language)) {
+            return null;
+        }
 
         if ($locale = $this->getLocale($language)) {
             \App::setLocale($locale->{$this->defaultKey});

@@ -89,10 +89,6 @@ trait TranslateableTrait
         $model = (new TranslationModel())
             ->fill($conditions);
 
-        if (!$this->translations) {
-            $this->translations = collect();
-        }
-
         $this->translations->push($model);
 
         return $model;

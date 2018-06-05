@@ -39,7 +39,7 @@ class UrlGeneratorTests extends TestCase
         $this->assertEquals(':psw@', $this->getPropertyValue($this->urlGenerator, 'pass'));
         $this->assertEquals('test.de', $this->getPropertyValue($this->urlGenerator, 'host'));
         $this->assertEquals(':81', $this->getPropertyValue($this->urlGenerator, 'port'));
-        $this->assertEquals('/my/file.php', $this->getPropertyValue($this->urlGenerator, 'path'));
+        $this->assertEquals(['', 'my', 'file.php'], $this->getPropertyValue($this->urlGenerator, 'path'));
         $this->assertEquals('?a=b&b[]=2&b[]=3', $this->getPropertyValue($this->urlGenerator, 'query'));
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
@@ -54,7 +54,7 @@ class UrlGeneratorTests extends TestCase
         $this->assertEquals(null, $this->getPropertyValue($this->urlGenerator, 'pass'));
         $this->assertEquals('test.de', $this->getPropertyValue($this->urlGenerator, 'host'));
         $this->assertEquals(':82', $this->getPropertyValue($this->urlGenerator, 'port'));
-        $this->assertEquals('/my/file.php', $this->getPropertyValue($this->urlGenerator, 'path'));
+        $this->assertEquals(['', 'my', 'file.php'], $this->getPropertyValue($this->urlGenerator, 'path'));
         $this->assertEquals(null, $this->getPropertyValue($this->urlGenerator, 'query'));
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
@@ -69,7 +69,7 @@ class UrlGeneratorTests extends TestCase
         $this->assertEquals(null, $this->getPropertyValue($this->urlGenerator, 'pass'));
         $this->assertEquals(null, $this->getPropertyValue($this->urlGenerator, 'host'));
         $this->assertEquals(null, $this->getPropertyValue($this->urlGenerator, 'port'));
-        $this->assertEquals('/my/file.php', $this->getPropertyValue($this->urlGenerator, 'path'));
+        $this->assertEquals(['', 'my', 'file.php'], $this->getPropertyValue($this->urlGenerator, 'path'));
         $this->assertEquals('?a=b&b[]=2&b[]=3', $this->getPropertyValue($this->urlGenerator, 'query'));
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
@@ -85,5 +85,59 @@ class UrlGeneratorTests extends TestCase
             ->localize($this->locale);
 
         $this->assertEquals('//usr:psw@test.de:81/en/my/file.php?a=b&b[]=2&b[]=3#myFragment', $actual);
+    }
+
+    /** @test */
+    public function it_returns_default_value_on_extracting_empty_url()
+    {
+        $actual = $this->invokeMethod($this->urlGenerator, 'extract', ['', 'scheme', '//']);
+        $this->assertEquals('//', $actual);
+    }
+
+    /** @test */
+    public function it_can_localize_url_which_already_contain_locale_keyword()
+    {
+        $english = \I18n::getLocale('en');
+        $spanish = \I18n::getLocale('es');
+
+        $englishUrl = 'https://github.com/en/laravel/framework?a=b&c=d';
+        $spanishUrl = 'https://github.com/es/laravel/framework?a=b&c=d';
+
+        $this->urlGenerator->setUrl($englishUrl);
+        $this->assertEquals($englishUrl, $this->urlGenerator->localize($english));
+
+        $this->urlGenerator->setUrl($englishUrl);
+        $this->assertEquals($spanishUrl, $this->urlGenerator->localize($spanish));
+
+        $this->urlGenerator->setUrl($spanishUrl);
+        $this->assertEquals($englishUrl, $this->urlGenerator->localize($english));
+
+        $this->urlGenerator->setUrl($spanishUrl);
+        $this->assertEquals($spanishUrl, $this->urlGenerator->localize($spanish));
+    }
+
+    /** @test */
+    public function it_can_localize_url_which_already_contain_locale_keyword_at_custom_segment_index()
+    {
+        $this->app['config']->set('i18n.locale_url_segment', 3);
+        \I18n::loadConfig();
+
+        $english = \I18n::getLocale('en');
+        $spanish = \I18n::getLocale('es');
+
+        $englishUrl = 'https://github.com/special/info/en/laravel/framework?a=b&c=d';
+        $spanishUrl = 'https://github.com/special/info/es/laravel/framework?a=b&c=d';
+
+        $this->urlGenerator->setUrl($englishUrl);
+        $this->assertEquals($englishUrl, $this->urlGenerator->localize($english));
+
+        $this->urlGenerator->setUrl($englishUrl);
+        $this->assertEquals($spanishUrl, $this->urlGenerator->localize($spanish));
+
+        $this->urlGenerator->setUrl($spanishUrl);
+        $this->assertEquals($englishUrl, $this->urlGenerator->localize($english));
+        
+        $this->urlGenerator->setUrl($spanishUrl);
+        $this->assertEquals($spanishUrl, $this->urlGenerator->localize($spanish));
     }
 }

@@ -191,6 +191,19 @@ class I18nServiceTests extends TestCase
     }
 
     /** @test */
+    public function it_will_return_null_if_the_language_segment_doesnt_contain_any_string()
+    {
+        $this->request->shouldReceive('segment')
+            ->with(1)
+            ->times(1)
+            ->andReturn(null);
+
+        $locale = $this->service->routedLocale();
+
+        $this->assertEquals(null, $locale);
+    }
+
+    /** @test */
     public function it_returns_spanish_route_prefix_based_on_the_routed_locale()
     {
         $this->request->shouldReceive('segment')

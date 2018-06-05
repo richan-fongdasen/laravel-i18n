@@ -155,7 +155,12 @@ class I18nService
         return $keys;
     }
 
-    protected function loadConfig()
+    /**
+     * Load I18n configurations
+     *
+     * @return void
+     */
+    public function loadConfig()
     {
         $this->config = \Config::get('i18n');
     }
@@ -227,4 +232,5 @@ class I18nService
 
         return $this->urlGenerator->setUrl($url)->localize($locale);
     }
+
 }

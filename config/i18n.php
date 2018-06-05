@@ -66,6 +66,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Locale URL segment number
+    |--------------------------------------------------------------------------
+    |
+    | Define which url segment number that will be used to put the current
+    | locale information. URL segment is started with '1'.
+    |
+    */
+   
+    'locale_url_segment' => 1,
+
+    /*
+    |--------------------------------------------------------------------------
     | Fallback language
     |--------------------------------------------------------------------------
     |

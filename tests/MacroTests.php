@@ -1,11 +1,11 @@
 <?php
 
-namespace RichanFongdasen\I18n\Tests\Eloquent;
+namespace RichanFongdasen\I18n\Tests;
 
-use RichanFongdasen\I18n\Tests\DatabaseTestCase;
+use Illuminate\Http\Request;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 
-class CollectionMacroTests extends DatabaseTestCase
+class MacroTests extends DatabaseTestCase
 {
     /** @test */
     public function eloquent_collections_are_translateable()

@@ -44,7 +44,7 @@ class UrlGenerator
     /**
      * Request path.
      *
-     * @var string
+     * @var array
      */
     protected $path;
 

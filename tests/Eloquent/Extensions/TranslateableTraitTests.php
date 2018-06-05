@@ -5,6 +5,7 @@ namespace RichanFongdasen\I18n\Tests\Eloquent\Extensions;
 use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Collection;
 use RichanFongdasen\I18n\Eloquent\TranslationModel;
+use RichanFongdasen\I18n\Eloquent\TranslationScope;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Tests\DatabaseTestCase;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
@@ -622,5 +623,27 @@ class TranslateableTraitTests extends DatabaseTestCase
             $this->assertEquals($locale->name . ' title 2', $product->title);
             $this->assertEquals($locale->name . ' description 2', $product->description);
         }
+    }
+
+    /** @test */
+    public function remove_global_scope_wont_do_any_changes_to_model_behavior()
+    {
+        $locale = \I18n::defaultLocale();
+
+        $model = new Product();
+        $query = Product::where('id', 7);
+        $model->removeGlobalScopes($query);
+        $product = $query->first()->translate('es');
+
+        $expected = \DB::table('product_translations')
+            ->where('product_id', 7)
+            ->where('locale', $locale->language)
+            ->first();
+
+        $actual = $this->getPropertyValue($product, 'fallbackTranslation');
+
+        $this->assertEquals($expected->id, $actual->id);
+        $this->assertEquals($expected->title, $actual->title);
+        $this->assertEquals($expected->description, $actual->description);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException;
 use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
@@ -173,9 +174,10 @@ class I18nService
     protected function loadLocale()
     {
         $cacheKey = 'laravel-i18n-locale-'.$this->getConfig('driver');
-        $cacheDuration = $this->getConfig('cache_duration', 1440);
+        $duration = $this->getConfig('cache_duration', 86400);
+        $ttl = Carbon::now()->addSeconds($duration);
 
-        return \Cache::remember($cacheKey, $cacheDuration, function () {
+        return \Cache::remember($cacheKey, $ttl, function () {
             return app(RepositoryManager::class)->collect();
         });
     }

@@ -21,7 +21,12 @@ class UrlGeneratorTests extends TestCase
      */
     protected $urlGenerator;
 
-    public function setUp()
+    /**
+     * Setup the test environment
+     *
+     * @return void
+     */
+    public function setUp() :void
     {
         parent::setUp();
 

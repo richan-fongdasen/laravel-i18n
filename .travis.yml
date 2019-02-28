@@ -4,7 +4,7 @@ dist: trusty
 
 matrix:
   fast_finish: true
-  include:s
+  include:
     - php: 7.1
       env: LARAVEL=5.5.* ORCHESTRA=3.5.*
     - php: 7.1

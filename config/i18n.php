@@ -32,11 +32,11 @@ return [
     | Cache duration
     |--------------------------------------------------------------------------
     |
-    | Define how long we should cache the language dataset.
+    | Define how long we should cache the language dataset in seconds.
     |
     */
 
-    'cache_duration' => 1440,
+    'cache_duration' => 86400,
 
     /*
     |--------------------------------------------------------------------------

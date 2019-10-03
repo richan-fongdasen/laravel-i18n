@@ -28,8 +28,8 @@
     },
     "require": {
         "php": "^7.2",
-        "illuminate/database": "5.8.*|6.0.*",
-        "illuminate/support": "5.8.*|6.0.*",
+        "illuminate/database": "5.8.*|^6.0",
+        "illuminate/support": "5.8.*|^6.0",
         "nesbot/carbon": "^2.0"
     },
     "require-dev": {

@@ -64,6 +64,7 @@ trait TranslatedRouteCommandContext
 
     /**
      * The env key that the forced locale for routing is stored in.
+     *
      * @return string
      */
     protected function getLocaleEnvKey()

@@ -38,19 +38,19 @@ class RouteTranslationsListCommand extends RouteListCommand
             return;
         }
 
-        $this->routes = $this->getFreshApplicationRoutes($locale);
-
-        $this->displayRoutes($this->getRoutes());
+        $this->displayRoutes($this->getLocaleRoutes($locale));
     }
 
     /**
-     * Compile the routes into a displayable format.
+     * Compile the locale routes into a displayable format.
      *
      * @return array
      */
-    protected function getRoutes()
+    protected function getLocaleRoutes($locale)
     {
-        $routes = collect($this->routes)->map(function ($route) {
+        $routes = $this->getFreshApplicationRoutes($locale);
+
+        $routes = collect($routes)->map(function ($route) {
             return $this->getRouteInformation($route);
         })->filter()->all();
 

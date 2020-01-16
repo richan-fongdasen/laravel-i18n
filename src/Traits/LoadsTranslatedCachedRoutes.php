@@ -49,7 +49,7 @@ trait LoadsTranslatedCachedRoutes
      *
      * @param string   $locale
      * @param string[] $localeKeys
-     * 
+     *
      * @return string
      */
     protected function makeLocaleRoutesPath($locale = null)

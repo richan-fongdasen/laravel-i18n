@@ -21,7 +21,6 @@ class RouteTranslationsListCommand extends RouteListCommand
      */
     protected $description = 'List all registered routes for specific locales';
 
-
     /**
      * Execute the console command.
      */
@@ -35,6 +34,7 @@ class RouteTranslationsListCommand extends RouteListCommand
 
         if (!$this->isSupportedLocale($locale)) {
             $this->error("Unsupported locale: '{$locale}'.");
+
             return;
         }
 
@@ -69,7 +69,7 @@ class RouteTranslationsListCommand extends RouteListCommand
      * Boot a fresh copy of the application and get the routes.
      *
      * @param string $locale
-     * 
+     *
      * @return \Illuminate\Routing\RouteCollection
      */
     protected function getFreshApplicationRoutes($locale)

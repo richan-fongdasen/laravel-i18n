@@ -65,11 +65,11 @@ class RouteTranslationsCacheCommand extends Command
         array_push($allLocales, null);
 
         foreach ($allLocales as $locale) {
-
             $routes = $this->getFreshApplicationRoutes($locale);
 
             if (count($routes) == 0) {
                 $this->error("Your application doesn't have any routes.");
+
                 return;
             }
 
@@ -87,7 +87,7 @@ class RouteTranslationsCacheCommand extends Command
      * Boot a fresh copy of the application and get the routes.
      *
      * @param string|null $locale
-     * 
+     *
      * @return \Illuminate\Routing\RouteCollection
      */
     protected function getFreshApplicationRoutes($locale = null)
@@ -95,7 +95,6 @@ class RouteTranslationsCacheCommand extends Command
         $app = require $this->getBootstrapPath().'/app.php';
 
         if (null !== $locale) {
-
             $key = $this->getLocaleEnvKey();
 
             putenv("{$key}={$locale}");
@@ -107,7 +106,6 @@ class RouteTranslationsCacheCommand extends Command
             putenv("{$key}");
 
             return $routes;
-
         }
 
         $app->make(Kernel::class)->bootstrap();
@@ -119,9 +117,9 @@ class RouteTranslationsCacheCommand extends Command
      * Build the route cache file.
      *
      * @param \Illuminate\Routing\RouteCollection $routes
-     * 
+     *
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
-     * 
+     *
      * @return string
      */
     protected function buildRouteCacheFile(RouteCollection $routes)

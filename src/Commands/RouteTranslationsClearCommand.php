@@ -27,6 +27,7 @@ class RouteTranslationsClearCommand extends Command
      * @var \Illuminate\Filesystem\Filesystem
      */
     protected $files;
+
     /**
      * Create a new route clear command instance.
      *
@@ -37,6 +38,7 @@ class RouteTranslationsClearCommand extends Command
         parent::__construct();
         $this->files = $files;
     }
+
     /**
      * Execute the console command.
      *

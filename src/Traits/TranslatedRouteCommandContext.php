@@ -10,7 +10,7 @@ trait TranslatedRouteCommandContext
      * Returns whether a given locale is supported.
      *
      * @param string $locale
-     * 
+     *
      * @return bool
      */
     protected function isSupportedLocale($locale)

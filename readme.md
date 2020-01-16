@@ -197,7 +197,7 @@ In your App's `RouteServiceProvider`, use the `LoadsTranslatedCachedRoutes` trai
 <?php
 class RouteServiceProvider extends ServiceProvider
 {
-    use \Mcamara\LaravelLocalization\Traits\LoadsTranslatedCachedRoutes;
+    use \RichanFongdasen\I18n\Traits\LoadsTranslatedCachedRoutes;
 ```
 
 

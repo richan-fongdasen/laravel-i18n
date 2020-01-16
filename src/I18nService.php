@@ -10,6 +10,11 @@ use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
 class I18nService
 {
     /**
+     * The env key that the forced locale for routing is stored in.
+     */
+    const ENV_ROUTE_KEY = 'I18N_ROUTING_LOCALE';
+
+    /**
      * I18n configuration.
      *
      * @var array
@@ -75,7 +80,7 @@ class I18nService
      */
     public function defaultLocale()
     {
-        $fallback = $this->getConfig('fallback_language');
+        $fallback = env(static::ENV_ROUTE_KEY, $this->getConfig('fallback_language'));
         $locale = $this->getLocale($fallback);
 
         if (!$locale instanceof Locale) {

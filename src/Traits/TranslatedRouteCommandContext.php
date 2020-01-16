@@ -42,12 +42,13 @@ trait TranslatedRouteCommandContext
         if (method_exists($this->laravel, 'bootstrapPath')) {
             return $this->laravel->bootstrapPath();
         }
+
         return $this->laravel->basePath().DIRECTORY_SEPARATOR.'bootstrap';
     }
 
     /**
      * @param string $locale
-     * 
+     *
      * @return string
      */
     protected function makeLocaleRoutesPath($locale = null)

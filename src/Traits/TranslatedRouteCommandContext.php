@@ -47,7 +47,7 @@ trait TranslatedRouteCommandContext
     }
 
     /**
-     * @param string $locale
+     * @param string|null $locale
      *
      * @return string
      */
@@ -62,6 +62,10 @@ trait TranslatedRouteCommandContext
         return $path;
     }
 
+    /**
+     * The env key that the forced locale for routing is stored in.
+     * @return string
+     */
     protected function getLocaleEnvKey()
     {
         return I18nService::ENV_ROUTE_KEY;

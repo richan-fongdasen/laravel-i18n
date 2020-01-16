@@ -46,8 +46,7 @@ trait LoadsTranslatedCachedRoutes
     /**
      * Returns the path to the cached routes file for a given locale.
      *
-     * @param string   $locale
-     * @param string[] $localeKeys
+     * @param string|null $locale
      *
      * @return string
      */

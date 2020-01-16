@@ -10,12 +10,14 @@ trait TranslatedRouteCommandContext
      * Returns whether a given locale is supported.
      *
      * @param string $locale
+     * 
      * @return bool
      */
     protected function isSupportedLocale($locale)
     {
         return $this->getI18nService()->getLocale($locale) !== null;
     }
+
     /**
      * @return string[]
      */
@@ -23,6 +25,7 @@ trait TranslatedRouteCommandContext
     {
         return $this->getI18nService()->getLocale()->toArray();
     }
+
     /**
      * @return \RichanFongdasen\I18n\I18nService
      */
@@ -30,6 +33,7 @@ trait TranslatedRouteCommandContext
     {
         return app(I18nService::class);
     }
+
     /**
      * @return string
      */
@@ -38,19 +42,22 @@ trait TranslatedRouteCommandContext
         if (method_exists($this->laravel, 'bootstrapPath')) {
             return $this->laravel->bootstrapPath();
         }
-        return $this->laravel->basePath() . DIRECTORY_SEPARATOR . 'bootstrap';
+        return $this->laravel->basePath().DIRECTORY_SEPARATOR.'bootstrap';
     }
+
     /**
      * @param string $locale
+     * 
      * @return string
      */
     protected function makeLocaleRoutesPath($locale = null)
     {
         $path = $this->laravel->getCachedRoutesPath();
-        if ( ! $locale ) {
+        if (!$locale) {
             return $path;
         }
-        $path = substr($path, 0, -4) . '_' . $locale . '.php';
+        $path = substr($path, 0, -4).'_'.$locale.'.php';
+
         return $path;
     }
 

@@ -32,7 +32,7 @@ class RouteTranslationsCacheCommand extends Command
     /**
      * Create a new route command instance.
      *
-     * @param Filesystem  $files
+     * @param Filesystem $files
      */
     public function __construct(Filesystem $files)
     {
@@ -87,11 +87,12 @@ class RouteTranslationsCacheCommand extends Command
      * Boot a fresh copy of the application and get the routes.
      *
      * @param string|null $locale
+     * 
      * @return \Illuminate\Routing\RouteCollection
      */
     protected function getFreshApplicationRoutes($locale = null)
     {
-        $app = require $this->getBootstrapPath() . '/app.php';
+        $app = require $this->getBootstrapPath().'/app.php';
 
         if (null !== $locale) {
 
@@ -117,19 +118,21 @@ class RouteTranslationsCacheCommand extends Command
     /**
      * Build the route cache file.
      *
-     * @param  \Illuminate\Routing\RouteCollection $routes
-     * @return string
+     * @param \Illuminate\Routing\RouteCollection $routes
+     * 
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * 
+     * @return string
      */
     protected function buildRouteCacheFile(RouteCollection $routes)
     {
         $stub = $this->files->get(
             realpath(
                 __DIR__
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . '..'
-                . DIRECTORY_SEPARATOR . 'stubs'
-                . DIRECTORY_SEPARATOR . 'routes.stub'
+                .DIRECTORY_SEPARATOR.'..'
+                .DIRECTORY_SEPARATOR.'..'
+                .DIRECTORY_SEPARATOR.'stubs'
+                .DIRECTORY_SEPARATOR.'routes.stub'
             )
         );
 
@@ -138,7 +141,7 @@ class RouteTranslationsCacheCommand extends Command
                 '{{routes}}',
             ],
             [
-                base64_encode(serialize($routes))
+                base64_encode(serialize($routes)),
             ],
             $stub
         );

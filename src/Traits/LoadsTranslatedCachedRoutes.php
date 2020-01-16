@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Log;
 use RichanFongdasen\I18n\I18nService;
 
 /**
- * LoadsTranslatedCachedRoutes
+ * LoadsTranslatedCachedRoutes.
  *
  * Add this trait to your App\RouteServiceProvider to load
  * translated cached routes for the active locale, instead
@@ -32,7 +32,7 @@ trait LoadsTranslatedCachedRoutes
 
         $path = $this->makeLocaleRoutesPath($locale);
 
-        if ( ! file_exists($path)) {
+        if (!file_exists($path)) {
 
             Log::warning("Routes cached, but no cached routes found for locale '{$locale}'!");
 
@@ -49,16 +49,17 @@ trait LoadsTranslatedCachedRoutes
      *
      * @param string   $locale
      * @param string[] $localeKeys
+     * 
      * @return string
      */
     protected function makeLocaleRoutesPath($locale = null)
     {
         $path = $this->getDefaultCachedRoutePath();
-        if ( ! $locale ) {
+        if (!$locale) {
             return $path;
         }
 
-        return substr($path, 0, -4) . '_' . $locale . '.php';
+        return substr($path, 0, -4).'_'.$locale.'.php';
     }
 
     /**

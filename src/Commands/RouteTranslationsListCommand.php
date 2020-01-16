@@ -4,7 +4,6 @@ namespace RichanFongdasen\I18n\Commands;
 
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Console\RouteListCommand;
-use Illuminate\Support\Facades\Config;
 use RichanFongdasen\I18n\Traits\TranslatedRouteCommandContext;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -34,7 +33,7 @@ class RouteTranslationsListCommand extends RouteListCommand
 
         $locale = $this->argument('locale');
 
-        if ( ! $this->isSupportedLocale($locale)) {
+        if (!$this->isSupportedLocale($locale)) {
             $this->error("Unsupported locale: '{$locale}'.");
             return;
         }
@@ -70,11 +69,12 @@ class RouteTranslationsListCommand extends RouteListCommand
      * Boot a fresh copy of the application and get the routes.
      *
      * @param string $locale
+     * 
      * @return \Illuminate\Routing\RouteCollection
      */
     protected function getFreshApplicationRoutes($locale)
     {
-        $app = require $this->getBootstrapPath() . '/app.php';
+        $app = require $this->getBootstrapPath().'/app.php';
 
         $key = $this->getLocaleEnvKey();
 

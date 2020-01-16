@@ -30,7 +30,7 @@ class RouteTranslationsClearCommand extends Command
     /**
      * Create a new route clear command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
      */
     public function __construct(Filesystem $files)
     {

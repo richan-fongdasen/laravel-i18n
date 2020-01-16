@@ -53,7 +53,7 @@ trait LoadsTranslatedCachedRoutes
     protected function makeLocaleRoutesPath($locale = null)
     {
         $path = $this->getDefaultCachedRoutePath();
-        if (!$locale) {
+        if ($locale === null) {
             return $path;
         }
 

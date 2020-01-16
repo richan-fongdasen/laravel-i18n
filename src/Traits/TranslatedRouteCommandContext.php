@@ -54,7 +54,7 @@ trait TranslatedRouteCommandContext
     protected function makeLocaleRoutesPath($locale = null)
     {
         $path = $this->laravel->getCachedRoutesPath();
-        if (!$locale) {
+        if ($locale === null) {
             return $path;
         }
         $path = substr($path, 0, -4).'_'.$locale.'.php';

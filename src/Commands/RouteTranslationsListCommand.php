@@ -26,16 +26,10 @@ class RouteTranslationsListCommand extends RouteListCommand
      */
     public function handle()
     {
-        if (empty($this->router->getRoutes())) {
-            return $this->error("Your application doesn't have any routes.");
-        }
-
         $locale = $this->argument('locale');
 
         if (!$this->isSupportedLocale($locale)) {
-            $this->error("Unsupported locale: '{$locale}'.");
-
-            return;
+            return $this->error("Unsupported locale: '{$locale}'.");
         }
 
         $this->displayRoutes($this->getLocaleRoutes($locale));
@@ -74,16 +68,11 @@ class RouteTranslationsListCommand extends RouteListCommand
      */
     protected function getFreshApplicationRoutes($locale)
     {
-        $app = require $this->getBootstrapPath().'/app.php';
-
         $key = $this->getLocaleEnvKey();
-
         putenv("{$key}={$locale}");
-
+        $app = require $this->getBootstrapPath().'/app.php';
         $app->make(Kernel::class)->bootstrap();
-
         $routes = $app['router']->getRoutes();
-
         putenv("{$key}");
 
         return $routes;

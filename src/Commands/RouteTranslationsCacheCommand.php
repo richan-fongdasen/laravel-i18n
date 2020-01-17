@@ -92,25 +92,16 @@ class RouteTranslationsCacheCommand extends Command
      */
     protected function getFreshApplicationRoutes($locale = null)
     {
-        $app = require $this->getBootstrapPath().'/app.php';
-
+        $key = $this->getLocaleEnvKey();
         if (null !== $locale) {
-            $key = $this->getLocaleEnvKey();
-
             putenv("{$key}={$locale}");
-
-            $app->make(Kernel::class)->bootstrap();
-
-            $routes = $app['router']->getRoutes();
-
-            putenv("{$key}");
-
-            return $routes;
         }
-
+        $app = require $this->getBootstrapPath().'/app.php';
         $app->make(Kernel::class)->bootstrap();
+        $routes = $app['router']->getRoutes();
+        putenv("{$key}");
 
-        return $app['router']->getRoutes();
+        return $routes;
     }
 
     /**

@@ -14,8 +14,6 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
 
     protected $laravel;
 
-    protected $request;
-
     /**
      * Setup the test environment
      *
@@ -57,7 +55,7 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
         $this->doCache();
 
         $allSupportedLocale = array_keys(\I18n::getLocale()->toArray());
-        array_push($allSupportedLocale, null);
+        array_push($allSupportedLocale, 'jp', null);
 
         foreach ($allSupportedLocale as $locale) {
             $this->request = \Mockery::mock(Request::class);
@@ -69,7 +67,7 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
             $this->loadCachedRoutes();
             $routes = app('router')->getRoutes()->getRoutes();
             $availableRoutes = Arr::pluck($routes, 'uri');
-            if (!$locale) {
+            if (!$locale || $locale = 'jp') {
                 $locale = $this->getI18nService()->routePrefix();
             }
             $this->assertEquals($availableRoutes, [$locale.'/foo', $locale.'/bar']);
@@ -83,13 +81,5 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
             ->expectsOutput('Routes cached successfully for all locales!')
             ->assertExitCode(0);
         $this->assertTrueLocaleCache();
-    }
-
-    /**
-     * @return \RichanFongdasen\I18n\I18nService
-     */
-    protected function getI18nService()
-    {
-        return new I18nService($this->request);
     }
 }

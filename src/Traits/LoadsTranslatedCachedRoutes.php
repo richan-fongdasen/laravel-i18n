@@ -15,6 +15,13 @@ use RichanFongdasen\I18n\I18nService;
 trait LoadsTranslatedCachedRoutes
 {
     /**
+     * Catch your Http Request.
+     *
+     * @var Illuminate\Http\Request
+     */
+    protected $request;
+
+    /**
      * Load the cached routes for the application.
      *
      * @return void
@@ -75,6 +82,6 @@ trait LoadsTranslatedCachedRoutes
      */
     protected function getI18nService()
     {
-        return app(I18nService::class);
+        return new I18nService($this->request);
     }
 }

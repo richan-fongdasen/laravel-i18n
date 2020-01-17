@@ -2,23 +2,11 @@
 
 namespace RichanFongdasen\I18n\Tests\Commands;
 
+use RichanFongdasen\I18n\Traits\LoadsTranslatedCachedRoutes;
+
 trait RouteTranslationTestTrait
 {
-    /**
-     * @param string|null $locale
-     *
-     * @return string
-     */
-    protected function makeLocaleRoutesPath($locale = null)
-    {
-        $path = $this->app->getCachedRoutesPath();
-        if ($locale === null) {
-            return $path;
-        }
-        $path = substr($path, 0, -4).'_'.$locale.'.php';
-
-        return $path;
-    }
+    use LoadsTranslatedCachedRoutes;
 
     protected function assertTrueLocaleCache()
     {

@@ -39,11 +39,7 @@ trait TranslatedRouteCommandContext
      */
     protected function getBootstrapPath()
     {
-        if (method_exists($this->laravel, 'bootstrapPath')) {
-            return $this->laravel->bootstrapPath();
-        }
-
-        return $this->laravel->basePath().DIRECTORY_SEPARATOR.'bootstrap';
+        return $this->laravel->bootstrapPath();
     }
 
     /**

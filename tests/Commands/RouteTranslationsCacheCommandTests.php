@@ -55,23 +55,40 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
         $this->doCache();
 
         $allSupportedLocale = array_keys(\I18n::getLocale()->toArray());
-        array_push($allSupportedLocale, 'jp', null);
+        array_push($allSupportedLocale, null);
 
         foreach ($allSupportedLocale as $locale) {
-            $this->request = \Mockery::mock(Request::class);
-
-            $this->request->shouldReceive('segment')
-                ->with(1)
-                ->andReturn($locale);
-
-            $this->loadCachedRoutes();
-            $routes = app('router')->getRoutes()->getRoutes();
-            $availableRoutes = Arr::pluck($routes, 'uri');
-            if (!$locale || $locale = 'jp') {
-                $locale = $this->getI18nService()->routePrefix();
-            }
-            $this->assertEquals($availableRoutes, [$locale.'/foo', $locale.'/bar']);
+            $this->assertLocaleCacheExist($locale, $locale ?? 'en');
         }
+        static::$useRoute = false;
+    }
+
+    /** @test */
+    public function it_will_create_a_log_message_and_use_default_when_not_supported_locale()
+    {
+        $this->laravel = $this->app;
+        static::$useRoute = true;
+        $this->doCache();
+
+        $expectedLocale = 'jp';
+        $defaultLocale = $this->app['config']->get('i18n.fallback_language');
+        $this->assertLocaleCacheExist($expectedLocale, $defaultLocale);
+
+        static::$useRoute = false;
+    }
+
+    /** @test */
+    public function it_will_create_a_log_message_and_use_default_when_cached_file_has_gone()
+    {
+        $this->laravel = $this->app;
+        static::$useRoute = true;
+        $this->doCache();
+        $locale = 'de';
+        if (file_exists($localePath = $this->makeLocaleRoutesPath($locale))) {
+            unlink($localePath);
+        }
+        $defaultLocale = $this->app['config']->get('i18n.fallback_language');
+        $this->assertLocaleCacheExist($locale, $defaultLocale);
         static::$useRoute = false;
     }
 
@@ -81,5 +98,19 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
             ->expectsOutput('Routes cached successfully for all locales!')
             ->assertExitCode(0);
         $this->assertTrueLocaleCache();
+    }
+
+    protected function assertLocaleCacheExist($expectedLocale, $actualLocale)
+    {
+        $this->request = \Mockery::mock(Request::class);
+
+        $this->request->shouldReceive('segment')
+            ->with(1)
+            ->andReturn($expectedLocale);
+
+        $this->loadCachedRoutes();
+        $routes = app('router')->getRoutes()->getRoutes();
+        $expectsRoutes = Arr::pluck($routes, 'uri');
+        $this->assertEquals($expectsRoutes, [$actualLocale.'/foo', $actualLocale.'/bar']);
     }
 }

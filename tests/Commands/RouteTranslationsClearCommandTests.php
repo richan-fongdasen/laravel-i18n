@@ -15,7 +15,6 @@ class RouteTranslationsClearCommandTests extends TestCase
     public function it_will_clear_locale_route_cache_files()
     {
         $this->laravel = $this->app;
-        WithRouteTestCase::$useRoute = true;
 
         $this->artisan('route:trans:cache')
             ->assertExitCode(0);

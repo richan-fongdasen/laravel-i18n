@@ -3,7 +3,7 @@ namespace RichanFongdasen\I18n\Tests;
 
 class WithRouteTestCase extends TestCase
 {
-    public static $useRoute = false;
+    public static $useRoute = true;
 
     public static function getApplication()
     {

@@ -36,22 +36,20 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
         $this->artisan('route:trans:cache')
             ->expectsOutput('Your application doesn\'t have any routes.')
             ->assertExitCode(0);
+        static::$useRoute = true;
     }
 
     /** @test */
     public function it_will_generate_cache_files()
     {
         $this->laravel = $this->app;
-        static::$useRoute = true;
         $this->doCache();
-        static::$useRoute = false;
     }
 
     /** @test */
     public function it_can_load_routes_from_cache_file()
     {
         $this->laravel = $this->app;
-        static::$useRoute = true;
         $this->doCache();
 
         $allSupportedLocale = array_keys(\I18n::getLocale()->toArray());
@@ -60,36 +58,31 @@ class RouteTranslationsCacheCommandTests extends WithRouteTestCase
         foreach ($allSupportedLocale as $locale) {
             $this->assertLocaleCacheExist($locale, $locale ?? 'en');
         }
-        static::$useRoute = false;
     }
 
     /** @test */
     public function it_will_create_a_log_message_and_use_default_when_not_supported_locale()
     {
         $this->laravel = $this->app;
-        static::$useRoute = true;
         $this->doCache();
 
         $expectedLocale = 'jp';
         $defaultLocale = $this->app['config']->get('i18n.fallback_language');
         $this->assertLocaleCacheExist($expectedLocale, $defaultLocale);
-
-        static::$useRoute = false;
     }
 
     /** @test */
     public function it_will_create_a_log_message_and_use_default_when_cached_file_has_gone()
     {
         $this->laravel = $this->app;
-        static::$useRoute = true;
         $this->doCache();
         $locale = 'de';
+        // delete 'de' locale route file
         if (file_exists($localePath = $this->makeLocaleRoutesPath($locale))) {
             unlink($localePath);
         }
         $defaultLocale = $this->app['config']->get('i18n.fallback_language');
         $this->assertLocaleCacheExist($locale, $defaultLocale);
-        static::$useRoute = false;
     }
 
     protected function doCache()

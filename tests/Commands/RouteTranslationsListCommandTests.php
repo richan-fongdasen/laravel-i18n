@@ -26,7 +26,6 @@ class RouteTranslationsListCommandTests extends TestCase
     /** @test */
     public function it_will_get_error_when_locale_not_supported()
     {
-        WithRouteTestCase::$useRoute = true;
         $this->artisan('route:trans:list', ['locale' => 'jp'])
             ->expectsOutput("Unsupported locale: 'jp'.")
             ->assertExitCode(0);
@@ -35,7 +34,6 @@ class RouteTranslationsListCommandTests extends TestCase
     /** @test */
     public function it_will_get_show_supported_locale_route()
     {
-        WithRouteTestCase::$useRoute = true;
         $this->artisan('route:trans:list', ['locale' => 'es', '--json' => true, '--sort' => 'name', '--reverse'=> true, '--compact' => true])
             ->expectsOutput('[{"method":"GET|HEAD","uri":"es\/foo","action":"RichanFongdasen\\\\I18n\\\\Tests\\\\Supports\\\\Controllers\\\\FooController"},{"method":"GET|HEAD","uri":"es\/bar","action":"RichanFongdasen\\\\I18n\\\\Tests\\\\Supports\\\\Controllers\\\\BarController"}]')
             ->assertExitCode(0);

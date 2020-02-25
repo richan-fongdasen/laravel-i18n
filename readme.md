@@ -193,19 +193,12 @@ For the route caching solution to work, it is required to make a minor adjustmen
 
 In your App's `RouteServiceProvider`, use the `LoadsTranslatedCachedRoutes` trait:
 
-and add `$this->request = request();` in method **boot()**
-
 ```php
 <?php
 class RouteServiceProvider extends ServiceProvider
 {
     use \RichanFongdasen\I18n\Traits\LoadsTranslatedCachedRoutes;
 
-    public function boot()
-    {
-        $this->request = request();
-        parent::boot();
-    }
 ```
 
 

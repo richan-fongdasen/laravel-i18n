@@ -46,7 +46,7 @@ class ServiceProvider extends Provider
      */
     public function register(): void
     {
-        $this->mergeConfigFrom(dirname(__DIR__) . '/config/i18n.php', 'i18n');
+        $this->mergeConfigFrom(dirname(__DIR__).'/config/i18n.php', 'i18n');
 
         $this->app->singleton(I18nService::class, function () {
             return new I18nService(request());

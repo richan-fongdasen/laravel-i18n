@@ -80,7 +80,7 @@ class UrlGenerator
      * Class constructor.
      *
      * @param I18nService $i18n
-     * @param string $key
+     * @param string      $key
      */
     public function __construct(I18nService $i18n, string $key)
     {
@@ -135,6 +135,7 @@ class UrlGenerator
      * its information.
      *
      * @param string $url
+     *
      * @return $this
      */
     public function setUrl(string $url): self

@@ -7,7 +7,8 @@ interface TranslateableModel
     /**
      * Get an attribute from the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttribute($key);
@@ -36,7 +37,8 @@ interface TranslateableModel
     /**
      * Determine if the model or any of the given attribute(s) have been modified.
      *
-     * @param  array|string|null  $attributes
+     * @param array|string|null $attributes
+     *
      * @return bool
      */
     public function isDirty($attributes = null);

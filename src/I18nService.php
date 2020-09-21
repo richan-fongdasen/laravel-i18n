@@ -72,8 +72,9 @@ class I18nService
     /**
      * Get default locale.
      *
-     * @return \RichanFongdasen\I18n\Locale
      * @throws InvalidFallbackLanguageException
+     *
+     * @return \RichanFongdasen\I18n\Locale
      */
     public function defaultLocale(): Locale
     {
@@ -96,7 +97,7 @@ class I18nService
      */
     protected function formatIetf(string $string): string
     {
-        return str_replace("_", '-', $string);
+        return str_replace('_', '-', $string);
     }
 
     /**
@@ -225,11 +226,12 @@ class I18nService
     /**
      * Generate a localized URL for the application.
      *
-     * @param string $url
-     * @param mixed|null  $locale
+     * @param string     $url
+     * @param mixed|null $locale
+     *
+     * @throws InvalidLocaleException|InvalidFallbackLanguageException
      *
      * @return string
-     * @throws InvalidLocaleException|InvalidFallbackLanguageException
      */
     public function url(string $url, $locale = null): string
     {

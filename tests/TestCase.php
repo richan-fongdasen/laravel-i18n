@@ -2,9 +2,9 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTest;
-use Orchestra\Testbench\Traits\ModelFactory;
 
 abstract class TestCase extends BaseTest
 {
@@ -108,37 +108,11 @@ abstract class TestCase extends BaseTest
      * to perform any tests.
      *
      * @param  string $migrationPath
-     * @param  string $factoryPath
      * @return void
      */
-    protected function prepareDatabase($migrationPath, $factoryPath = null)
+    protected function prepareDatabase($migrationPath)
     {
         $this->loadMigrationsFrom($migrationPath);
-
-        if (!$factoryPath) {
-            return;
-        }
-
-        if (method_exists($this, 'withFactories')) {
-            $this->withFactories($factoryPath);
-        } else {
-            $this->app->make(ModelFactory::class)->load($factoryPath);
-        }
-    }
-
-    /**
-     * Prepare to get an exception in a test
-     *
-     * @param  mixed $exception
-     * @return void
-     */
-    protected function prepareException($exception)
-    {
-        if (method_exists($this, 'expectException')) {
-            $this->expectException($exception);
-        } else {
-            $this->setExpectedException($exception);
-        }
     }
 
     /**
@@ -151,8 +125,11 @@ abstract class TestCase extends BaseTest
         parent::setUp();
 
         $this->prepareDatabase(
-            realpath(__DIR__ . '/../database/migrations'),
-            null
+            realpath(__DIR__ . '/../database/migrations')
         );
+
+        Factory::guessFactoryNamesUsing(function (string $modelName) {
+            return 'Database\\Factories\\' . class_basename($modelName) . 'Factory';
+        });
     }
 }

@@ -2,7 +2,7 @@
 
 namespace RichanFongdasen\I18n\Eloquent;
 
-use Illuminate\Database\Eloquent\Model;
+use RichanFongdasen\I18n\Contracts\TranslateableModel;
 
 class Observer
 {
@@ -13,7 +13,7 @@ class Observer
      *
      * @return bool
      */
-    protected function isDirty(TranslationModel $model)
+    protected function isDirty(TranslationModel $model): bool
     {
         return $model->isDirty();
     }
@@ -21,13 +21,13 @@ class Observer
     /**
      * Listening to any saved events.
      *
-     * @param \Illuminate\Database\Eloquent\Model $model
+     * @param \RichanFongdasen\I18n\Contracts\TranslateableModel $model
      *
      * @return void
      */
-    public function saved(Model $model)
+    public function saved(TranslateableModel $model): void
     {
-        foreach ($model->translations as $translation) {
+        foreach ($model->getAttribute('translations') as $translation) {
             if ($this->isDirty($translation)) {
                 $translation->setAttribute($model->getForeignKey(), $model->getKey())
                     ->setTable($model->getTranslationTable())

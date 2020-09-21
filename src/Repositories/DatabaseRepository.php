@@ -2,6 +2,8 @@
 
 namespace RichanFongdasen\I18n\Repositories;
 
+use Illuminate\Support\Collection;
+
 class DatabaseRepository extends Repository
 {
     /**
@@ -9,7 +11,7 @@ class DatabaseRepository extends Repository
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function read()
+    protected function read(): Collection
     {
         return \DB::table($this->datasource)
             ->orderBy('order', 'asc')

@@ -53,7 +53,7 @@ class I18nServiceTests extends TestCase
     /** @test */
     public function it_raises_exception_when_it_cant_find_the_default_locale()
     {
-        $this->prepareException(InvalidFallbackLanguageException::class);
+        $this->expectException(InvalidFallbackLanguageException::class);
 
         $this->app['config']->set('i18n.fallback_language', 'ar');
         $this->invokeMethod($this->service, 'loadConfig');
@@ -234,7 +234,7 @@ class I18nServiceTests extends TestCase
     /** @test */
     public function it_raises_exception_on_generating_url_with_an_invalid_locale()
     {
-        $this->prepareException(InvalidLocaleException::class);
+        $this->expectException(InvalidLocaleException::class);
 
         $this->service->url('/about-us/company-overview', 'ar');
     }

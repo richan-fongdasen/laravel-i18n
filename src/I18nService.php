@@ -4,6 +4,7 @@ namespace RichanFongdasen\I18n;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException;
 use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
 
@@ -65,15 +66,16 @@ class I18nService
 
         $this->locale = $this->loadLocale();
 
-        $this->urlGenerator = new UrlGenerator($this->defaultKey);
+        $this->urlGenerator = new UrlGenerator($this, $this->defaultKey);
     }
 
     /**
      * Get default locale.
      *
      * @return \RichanFongdasen\I18n\Locale
+     * @throws InvalidFallbackLanguageException
      */
-    public function defaultLocale()
+    public function defaultLocale(): Locale
     {
         $fallback = $this->getConfig('fallback_language');
         $locale = $this->getLocale($fallback);
@@ -92,9 +94,9 @@ class I18nService
      *
      * @return string
      */
-    protected function formatIetf($string)
+    protected function formatIetf(string $string): string
     {
-        return preg_replace('/\_/', '-', $string);
+        return str_replace("_", '-', $string);
     }
 
     /**
@@ -105,7 +107,7 @@ class I18nService
      *
      * @return mixed
      */
-    public function getConfig($key, $default = null)
+    public function getConfig(string $key, $default = null)
     {
         return data_get($this->config, $key, $default);
     }
@@ -119,7 +121,7 @@ class I18nService
      *
      * @return mixed
      */
-    public function getLocale($keyword = null)
+    public function getLocale(?string $keyword = null)
     {
         if ($keyword === null) {
             return $this->locale;
@@ -142,7 +144,7 @@ class I18nService
      *
      * @return null|array
      */
-    public function getLocaleKeys($key = null)
+    public function getLocaleKeys(?string $key = null): ?array
     {
         if (empty($key)) {
             $key = $this->defaultKey;
@@ -161,7 +163,7 @@ class I18nService
      *
      * @return void
      */
-    public function loadConfig()
+    public function loadConfig(): void
     {
         $this->config = \Config::get('i18n');
     }
@@ -171,7 +173,7 @@ class I18nService
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function loadLocale()
+    protected function loadLocale(): Collection
     {
         $cacheKey = 'laravel-i18n-locale-'.$this->getConfig('driver');
         $duration = $this->getConfig('cache_duration', 86400);
@@ -189,7 +191,7 @@ class I18nService
      *
      * @return \RichanFongdasen\I18n\Locale|null
      */
-    public function routedLocale(Request $request = null)
+    public function routedLocale(Request $request = null): ?Locale
     {
         if (!$request) {
             $request = $this->request;
@@ -213,7 +215,7 @@ class I18nService
      *
      * @return string
      */
-    public function routePrefix()
+    public function routePrefix(): string
     {
         $locale = $this->routedLocale() ? $this->routedLocale() : $this->defaultLocale();
 
@@ -224,11 +226,12 @@ class I18nService
      * Generate a localized URL for the application.
      *
      * @param string $url
-     * @param mixed  $locale
+     * @param mixed|null  $locale
      *
      * @return string
+     * @throws InvalidLocaleException|InvalidFallbackLanguageException
      */
-    public function url($url, $locale = null)
+    public function url(string $url, $locale = null): string
     {
         if (is_string($locale) && !($locale = $this->getLocale($locale))) {
             throw new InvalidLocaleException('Failed to generate URL with the given locale');

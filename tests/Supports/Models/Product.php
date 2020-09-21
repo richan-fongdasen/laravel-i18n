@@ -2,14 +2,14 @@
 
 namespace RichanFongdasen\I18n\Tests\Supports\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use RichanFongdasen\I18n\Contracts\TranslateableModel;
 use RichanFongdasen\I18n\Eloquent\Extensions\TranslateableTrait;
-use RichanFongdasen\I18n\Tests\Supports\Models\ProductCategory;
-use RichanFongdasen\I18n\Tests\Supports\Models\ProductSpec;
-use RichanFongdasen\I18n\Tests\Supports\Models\ProductTranslation;
 
-class Product extends Model
+class Product extends Model implements TranslateableModel
 {
+    use HasFactory;
     use TranslateableTrait;
 
     public $fillable = [

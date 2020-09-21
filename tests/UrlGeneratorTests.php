@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\UrlGenerator;
 
@@ -31,7 +32,7 @@ class UrlGeneratorTests extends TestCase
         parent::setUp();
 
         $this->locale = new Locale('English', 'EN', 'us');
-        $this->urlGenerator = new UrlGenerator('language');
+        $this->urlGenerator = new UrlGenerator(app(I18nService::class),'language');
     }
 
     /** @test */

@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Repositories;
 
+use Illuminate\Support\Collection;
 use RichanFongdasen\I18n\Locale;
 
 abstract class Repository
@@ -28,7 +29,7 @@ abstract class Repository
      *
      * @return \Illuminate\Support\Collection
      */
-    public function collect()
+    public function collect(): Collection
     {
         $collection = collect();
 

@@ -45,7 +45,7 @@ class LocaleTests extends TestCase
     /** @test */
     public function it_raises_exception_on_undefined_property_access()
     {
-        $this->prepareException(\ErrorException::class);
+        $this->expectException(\ErrorException::class);
 
         $test = $this->locale->asdfg;
     }

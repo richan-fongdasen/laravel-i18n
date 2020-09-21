@@ -3,6 +3,7 @@
 namespace RichanFongdasen\I18n\Tests\Negotiators;
 
 use Illuminate\Http\Request;
+use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Negotiators\BrowserNegotiator;
 use RichanFongdasen\I18n\Tests\TestCase;
@@ -33,7 +34,7 @@ class BrowserNegotiatorTests extends TestCase
         parent::setUp();
 
         $this->request = \Mockery::mock(Request::class);
-        $this->negotiator = new BrowserNegotiator();
+        $this->negotiator = new BrowserNegotiator(app(I18nService::class));
     }
 
     /** @test */

@@ -49,7 +49,7 @@ trait TranslateableTrait
      *
      * @return array
      */
-    public function attributesToArray()
+    public function attributesToArray(): array
     {
         $attributes = parent::attributesToArray();
 
@@ -65,7 +65,7 @@ trait TranslateableTrait
      *
      * @return void
      */
-    public static function bootTranslateableTrait()
+    public static function bootTranslateableTrait(): void
     {
         static::addGlobalScope(new TranslationScope());
         static::observe(app(Observer::class));
@@ -79,7 +79,7 @@ trait TranslateableTrait
      *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
-    protected function createTranslation(Locale $locale)
+    protected function createTranslation(Locale $locale): TranslationModel
     {
         $conditions = [
             $this->getForeignKey() => $this->getKey(),
@@ -101,7 +101,7 @@ trait TranslateableTrait
      *
      * @return $this
      */
-    public function fill(array $attributes)
+    public function fill(array $attributes): self
     {
         foreach ($this->getTranslateableAttributes() as $key) {
             if (isset($attributes[$key])) {
@@ -133,7 +133,7 @@ trait TranslateableTrait
      *
      * @return string[]
      */
-    protected function getJoinAttributes()
+    protected function getJoinAttributes(): array
     {
         $attributes = [$this->getTable().'.*'];
 
@@ -149,7 +149,7 @@ trait TranslateableTrait
      *
      * @return array
      */
-    public function getTranslateableAttributes()
+    public function getTranslateableAttributes(): array
     {
         return is_array($this->translateFields) ? $this->translateFields : [];
     }
@@ -162,7 +162,7 @@ trait TranslateableTrait
      *
      * @return mixed
      */
-    protected function getTranslated($key)
+    protected function getTranslated(string $key)
     {
         if (!$this->locale) {
             $this->translate();
@@ -184,7 +184,7 @@ trait TranslateableTrait
      *
      * @return mixed
      */
-    protected function getTranslatedValue($translation, $key)
+    protected function getTranslatedValue($translation, string $key)
     {
         if (!$translation instanceof Model) {
             return null;
@@ -201,7 +201,7 @@ trait TranslateableTrait
      *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
-    protected function getTranslation(Locale $locale)
+    protected function getTranslation(Locale $locale): TranslationModel
     {
         $this->translate($locale);
 
@@ -220,7 +220,7 @@ trait TranslateableTrait
      *
      * @return \RichanFongdasen\I18n\Locale
      */
-    protected function getTranslationLocale($key = null)
+    protected function getTranslationLocale($key = null): Locale
     {
         if ($key instanceof Locale) {
             return $key;
@@ -242,7 +242,7 @@ trait TranslateableTrait
      *
      * @return string
      */
-    public function getTranslationTable()
+    public function getTranslationTable(): string
     {
         if (!isset($this->translationTable)) {
             $suffix = \I18n::getConfig('translation_table_suffix');
@@ -261,7 +261,7 @@ trait TranslateableTrait
      *
      * @return bool
      */
-    protected function isTranslateableAttribute($key)
+    protected function isTranslateableAttribute(string $key): bool
     {
         $fields = $this->getTranslateableAttributes();
 
@@ -276,7 +276,7 @@ trait TranslateableTrait
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeJoinTranslation(Builder $query)
+    public function scopeJoinTranslation(Builder $query): Builder
     {
         $attributes = $this->getJoinAttributes();
 
@@ -295,7 +295,7 @@ trait TranslateableTrait
      * @param string $key
      * @param mixed  $value
      *
-     * @return $this
+     * @return mixed
      */
     public function setAttribute($key, $value)
     {
@@ -321,7 +321,7 @@ trait TranslateableTrait
      *
      * @return void
      */
-    protected function setFallbackTranslation()
+    protected function setFallbackTranslation(): void
     {
         $locale = \I18n::defaultLocale()->{self::$localeKey};
         $this->fallbackTranslation = $this->translations->where('locale', $locale)->first();
@@ -337,7 +337,7 @@ trait TranslateableTrait
      *
      * @return $this
      */
-    protected function setTranslateableAttribute($key, $data, $locale = null)
+    protected function setTranslateableAttribute(string $key, $data, $locale = null): self
     {
         if (is_array($data)) {
             foreach ($data as $language => $value) {
@@ -362,7 +362,7 @@ trait TranslateableTrait
      *
      * @return $this
      */
-    public function translate($key = null)
+    public function translate($key = null): self
     {
         if (!$this->fallbackTranslation) {
             $this->setFallbackTranslation();
@@ -382,7 +382,7 @@ trait TranslateableTrait
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function translations()
+    public function translations(): HasMany
     {
         $model = new TranslationModel();
         $model->setTable($this->getTranslationTable());

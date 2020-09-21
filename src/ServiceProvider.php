@@ -13,7 +13,7 @@ class ServiceProvider extends Provider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->publishAssets();
         $this->registerMacro();
@@ -24,7 +24,7 @@ class ServiceProvider extends Provider
      *
      * @return void
      */
-    protected function publishAssets()
+    protected function publishAssets(): void
     {
         $this->publishes([
             realpath(__DIR__.'/../config/i18n.php') => config_path('i18n.php'),
@@ -44,9 +44,9 @@ class ServiceProvider extends Provider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->mergeConfigFrom(realpath(__DIR__.'/../config/i18n.php'), 'i18n');
+        $this->mergeConfigFrom(dirname(__DIR__) . '/config/i18n.php', 'i18n');
 
         $this->app->singleton(I18nService::class, function () {
             return new I18nService(request());
@@ -58,7 +58,7 @@ class ServiceProvider extends Provider
      *
      * @return void
      */
-    protected function registerMacro()
+    protected function registerMacro(): void
     {
         Collection::macro('translate', function ($locale) {
             $this->each(function ($item, $key) use ($locale) {

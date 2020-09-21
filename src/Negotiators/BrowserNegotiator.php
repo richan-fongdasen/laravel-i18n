@@ -32,8 +32,9 @@ class BrowserNegotiator implements LanguageNegotiator
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @return \RichanFongdasen\I18n\Locale
      * @throws \RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException
+     *
+     * @return \RichanFongdasen\I18n\Locale
      */
     public function preferredLocale(Request $request): Locale
     {

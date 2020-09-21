@@ -4,7 +4,6 @@ namespace RichanFongdasen\I18n\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
 use RichanFongdasen\I18n\I18nService;
 
 class NegotiateLanguage
@@ -32,9 +31,10 @@ class NegotiateLanguage
      * @param \Illuminate\Http\Request $request
      * @param \Closure                 $next
      *
-     * @return mixed
      * @throws \RichanFongdasen\I18n\Exceptions\InvalidLocaleException
      * @throws \RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException
+     *
+     * @return mixed
      */
     public function handle(Request $request, Closure $next)
     {

@@ -24,7 +24,7 @@ class RepositoryManager extends Manager
      *
      * @return \RichanFongdasen\I18n\Repositories\DatabaseRepository
      */
-    public function createDatabaseDriver()
+    public function createDatabaseDriver(): DatabaseRepository
     {
         return new DatabaseRepository($this->getDatasource());
     }
@@ -34,7 +34,7 @@ class RepositoryManager extends Manager
      *
      * @return \RichanFongdasen\I18n\Repositories\JsonRepository
      */
-    public function createJsonDriver()
+    public function createJsonDriver(): JsonRepository
     {
         return new JsonRepository($this->getDatasource());
     }
@@ -44,9 +44,9 @@ class RepositoryManager extends Manager
      *
      * @return string
      */
-    protected function getDatasource()
+    protected function getDatasource(): string
     {
-        return $this->app['config']['i18n.language_datasource'];
+        return (string) config('i18n.language_datasource');
     }
 
     /**
@@ -54,8 +54,8 @@ class RepositoryManager extends Manager
      *
      * @return string
      */
-    public function getDefaultDriver()
+    public function getDefaultDriver(): string
     {
-        return $this->app['config']['i18n.driver'];
+        return (string) config('i18n.driver', 'json');
     }
 }

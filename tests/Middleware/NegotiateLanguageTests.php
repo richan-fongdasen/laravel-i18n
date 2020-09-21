@@ -4,6 +4,7 @@ namespace RichanFongdasen\I18n\Tests\Middleware;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Middleware\NegotiateLanguage;
 use RichanFongdasen\I18n\Tests\TestCase;
@@ -34,7 +35,7 @@ class NegotiateLanguageTests extends TestCase
         parent::setUp();
 
         $this->request = \Mockery::mock(Request::class);
-        $this->middleware = new NegotiateLanguage();
+        $this->middleware = new NegotiateLanguage(app(I18nService::class));
     }
 
     /** @test */

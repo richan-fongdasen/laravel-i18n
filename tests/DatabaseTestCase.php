@@ -5,7 +5,6 @@ namespace RichanFongdasen\I18n\Tests;
 use Faker\Generator;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 use RichanFongdasen\I18n\Tests\Supports\Models\ProductCategory;
-use RichanFongdasen\I18n\Tests\Supports\Models\ProductSpec;
 
 abstract class DatabaseTestCase extends TestCase
 {
@@ -40,8 +39,7 @@ abstract class DatabaseTestCase extends TestCase
         parent::setUp();
 
         $this->prepareDatabase(
-            realpath(__DIR__ . '/Supports/database/migrations'),
-            realpath(__DIR__ . '/Supports/database/factories')
+            realpath(__DIR__ . '/Supports/Migrations')
         );
 
         $this->faker = app(Generator::class);
@@ -63,7 +61,7 @@ abstract class DatabaseTestCase extends TestCase
         $key = $this->key;
         $locales = $this->locale;
 
-        factory(ProductCategory::class, 2)->create()
+        ProductCategory::factory(2)->create()
             ->each(function ($productCategory) use ($faker, $key, $locales) {
                 foreach ($locales as $locale) {
                     \DB::table('product_category_translations')->insert([
@@ -90,7 +88,7 @@ abstract class DatabaseTestCase extends TestCase
         $locales = $this->locale;
 
         foreach ($categories as $category) {
-            factory(Product::class, 6)->create([
+            Product::factory(6)->create([
                 'product_category_id' => $category->id
             ])->each(function ($product) use ($faker, $key, $locales) {
                 foreach ($locales as $locale) {

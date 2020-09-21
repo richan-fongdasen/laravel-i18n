@@ -3,6 +3,7 @@
 namespace RichanFongdasen\I18n\Contracts;
 
 use Illuminate\Http\Request;
+use RichanFongdasen\I18n\Locale;
 
 interface LanguageNegotiator
 {
@@ -13,5 +14,5 @@ interface LanguageNegotiator
      *
      * @return \RichanFongdasen\I18n\Locale
      */
-    public function preferredLocale(Request $request);
+    public function preferredLocale(Request $request): Locale;
 }

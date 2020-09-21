@@ -70,12 +70,21 @@ class UrlGenerator
     protected $key;
 
     /**
+     * I18n service instance.
+     *
+     * @var I18nService
+     */
+    protected $i18n;
+
+    /**
      * Class constructor.
      *
-     * @param string $key
+     * @param I18nService $i18n
+     * @param string      $key
      */
-    public function __construct($key)
+    public function __construct(I18nService $i18n, string $key)
     {
+        $this->i18n = $i18n;
         $this->key = $key;
     }
 
@@ -91,7 +100,7 @@ class UrlGenerator
      *
      * @return string
      */
-    private function extract($url, $key, $default = '', $prefix = '', $suffix = '')
+    private function extract($url, string $key, string $default = '', string $prefix = '', string $suffix = ''): string
     {
         if (empty($url)) {
             return $default;
@@ -108,11 +117,11 @@ class UrlGenerator
      *
      * @return string
      */
-    public function localize(Locale $locale)
+    public function localize(Locale $locale): string
     {
         $this->stripLocaleFromPath();
 
-        $index = (int) \I18n::getConfig('locale_url_segment');
+        $index = (int) $this->i18n->getConfig('locale_url_segment');
         array_splice($this->path, $index, 0, $locale->{$this->key});
 
         $path = implode('/', $this->path);
@@ -126,8 +135,10 @@ class UrlGenerator
      * its information.
      *
      * @param string $url
+     *
+     * @return $this
      */
-    public function setUrl($url)
+    public function setUrl(string $url): self
     {
         $url = parse_url($url);
 
@@ -157,10 +168,10 @@ class UrlGenerator
      *
      * @return void
      */
-    public function stripLocaleFromPath()
+    public function stripLocaleFromPath(): void
     {
-        $index = (int) \I18n::getConfig('locale_url_segment');
-        $locale = \I18n::getLocale($this->path[$index]);
+        $index = (int) $this->i18n->getConfig('locale_url_segment');
+        $locale = $this->i18n->getLocale($this->path[$index]);
 
         if ($locale instanceof Locale) {
             array_splice($this->path, $index, 1);

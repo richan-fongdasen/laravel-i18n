@@ -8,6 +8,11 @@ use Illuminate\Database\Eloquent\Scope;
 
 class TranslationScope implements Scope
 {
+    /**
+     * Eloquent model object.
+     *
+     * @var \Illuminate\Database\Eloquent\Model
+     */
     public $model;
 
     /**
@@ -18,7 +23,7 @@ class TranslationScope implements Scope
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply(Builder $builder, Model $model)
+    public function apply(Builder $builder, Model $model): Builder
     {
         $this->model = $model;
 

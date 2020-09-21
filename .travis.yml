@@ -5,16 +5,10 @@ dist: bionic
 matrix:
   fast_finish: true
   include:
-    - php: 7.2
-      env: LARAVEL=5.8.* ORCHESTRA=3.8.*
     - php: 7.3
-      env: LARAVEL=^6.0 ORCHESTRA=^4.0
+      env: LARAVEL=^8.0 ORCHESTRA=^6.0
     - php: 7.4
-      env: LARAVEL=^6.0 ORCHESTRA=^4.0
-    - php: 7.3
-      env: LARAVEL=^7.0 ORCHESTRA=^5.0
-    - php: 7.4
-      env: LARAVEL=^7.0 ORCHESTRA=^5.0 COVERAGE=1
+      env: LARAVEL=^8.0 ORCHESTRA=^6.0 COVERAGE=1
 
   allow_failures:
     - env: COVERAGE=1

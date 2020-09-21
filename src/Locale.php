@@ -56,7 +56,7 @@ class Locale
      *
      * @return string
      */
-    public function __get($name)
+    public function __get(string $name): string
     {
         return $this->{$name};
     }
@@ -69,7 +69,7 @@ class Locale
      *
      * @return bool
      */
-    public function __isset($name)
+    public function __isset(string $name): bool
     {
         return isset($this->{$name});
     }

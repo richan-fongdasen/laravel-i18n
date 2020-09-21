@@ -9,8 +9,10 @@ class JsonRepository extends Repository
      *
      * @return array
      */
-    protected function read()
+    protected function read(): array
     {
-        return json_decode(file_get_contents($this->datasource));
+        $content = file_get_contents($this->datasource);
+
+        return ($content !== false) ? json_decode($content) : [];
     }
 }

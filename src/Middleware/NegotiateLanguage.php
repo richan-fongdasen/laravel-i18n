@@ -42,7 +42,7 @@ class NegotiateLanguage
             $negotiator = $this->i18n->getConfig('negotiator');
             $locale = app($negotiator)->preferredLocale($request);
 
-            return redirect($this->i18n->url($request->getRequestUri(), $locale));
+            return redirect($this->i18n->url($request->fullUrl(), $locale));
         }
 
         return $next($request);

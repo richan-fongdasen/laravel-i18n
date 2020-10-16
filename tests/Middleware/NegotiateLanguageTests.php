@@ -71,9 +71,9 @@ class NegotiateLanguageTests extends TestCase
             ->times(1)
             ->andReturn('about-us');
 
-        $this->request->shouldReceive('getRequestUri')
+        $this->request->shouldReceive('fullUrl')
             ->times(1)
-            ->andReturn('/about-us/company-overview?a=b&c=d');
+            ->andReturn('http://localhost/about-us/company-overview?a=b&c=d');
 
         $response = $this->middleware->handle($this->request, $closure);
         $expected = 'http://localhost/en/about-us/company-overview?a=b&c=d';
@@ -98,9 +98,9 @@ class NegotiateLanguageTests extends TestCase
             ->times(1)
             ->andReturn('about-us');
 
-        $this->request->shouldReceive('getRequestUri')
+        $this->request->shouldReceive('fullUrl')
             ->times(1)
-            ->andReturn('/about-us/company-overview?a=b&c=d');
+            ->andReturn('http://localhost/about-us/company-overview?a=b&c=d');
 
         $response = $this->middleware->handle($this->request, $closure);
         $expected = 'http://localhost/es/about-us/company-overview?a=b&c=d';

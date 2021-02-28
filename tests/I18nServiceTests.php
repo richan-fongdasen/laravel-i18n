@@ -152,11 +152,25 @@ class I18nServiceTests extends TestCase
     }
 
     /** @test */
+    public function it_caches_locale()
+    {
+        $cacheKey = 'laravel-i18n-locale-'.$this->service->getConfig('driver');
+        \Cache::forget($cacheKey);
+        $collection = $this->invokeMethod($this->service, 'loadLocale');
+
+        $this->assertEquals($collection->get('en'), \Cache::get($cacheKey)->get('en'));
+        $this->assertEquals($collection->get('es'), \Cache::get($cacheKey)->get('es'));
+        $this->assertEquals($collection->get('de'), \Cache::get($cacheKey)->get('de'));
+    }
+
+    /** @test */
     public function it_does_not_cache_locale()
     {
-        $this->app['config']->set('i18n.enable_cache', 'false');
+        $this->app['config']->set('i18n.enable_cache', false);
+        $this->invokeMethod($this->service, 'loadConfig');
         $cacheKey = 'laravel-i18n-locale-'.$this->service->getConfig('driver');
-        $collection = $this->invokeMethod($this->service, 'loadLocale');
+        \Cache::forget($cacheKey);
+        $this->invokeMethod($this->service, 'loadLocale');
 
         $this->assertEquals(null, \Cache::get($cacheKey));
     }

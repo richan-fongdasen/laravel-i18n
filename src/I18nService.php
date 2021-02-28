@@ -180,6 +180,10 @@ class I18nService
         $duration = $this->getConfig('cache_duration', 86400);
         $ttl = Carbon::now()->addSeconds($duration);
 
+        if (!$this->getConfig('enable_cache')) {
+            return app(RepositoryManager::class)->collect();
+        }
+
         return \Cache::remember($cacheKey, $ttl, function () {
             return app(RepositoryManager::class)->collect();
         });

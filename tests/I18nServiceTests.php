@@ -152,6 +152,16 @@ class I18nServiceTests extends TestCase
     }
 
     /** @test */
+    public function it_does_not_cache_locale()
+    {
+        $this->app['config']->set('i18n.enable_cache', 'false');
+        $cacheKey = 'laravel-i18n-locale-'.$this->service->getConfig('driver');
+        $collection = $this->invokeMethod($this->service, 'loadLocale');
+
+        $this->assertEquals(null, \Cache::get($cacheKey));
+    }
+
+    /** @test */
     public function it_can_determine_the_routed_locale_based_on_the_given_request_object()
     {
         $this->request->shouldReceive('segment')

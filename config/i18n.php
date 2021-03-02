@@ -97,5 +97,15 @@ return [
     | translation table name.
     |
     */
-    'translation_table_suffix' => 'translations'
+    'translation_table_suffix' => 'translations',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Store to the cache
+    |--------------------------------------------------------------------------
+    |
+    | Toggle store locale to the cache
+    |
+    */
+    'enable_cache' => env('I18N_ENABLE_CACHE', true),
 ];

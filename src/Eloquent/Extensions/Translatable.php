@@ -143,7 +143,8 @@ trait Translatable
      * and assign them into the given array.
      *
      * @param TranslationModel $model
-     * @param array $result
+     * @param array            $result
+     *
      * @return array
      */
     protected function extractTranslatableAttributes(TranslationModel $model, array $result): array

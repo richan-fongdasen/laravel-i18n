@@ -23,7 +23,7 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v2
         env:
-          cache-name: cache-gcr-worker-laravel-latest
+          cache-name: cache-i18n-laravel-latest
         with:
           path: ~/.composer
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
@@ -76,7 +76,7 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v2
         env:
-          cache-name: cache-gcr-worker-laravel-latest
+          cache-name: cache-i18n-laravel-latest
         with:
           path: ~/.composer
           key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}

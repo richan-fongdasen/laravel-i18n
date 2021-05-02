@@ -18,31 +18,31 @@ trait TranslateableTrait
      * the value from this object, if there was no
      * translated attribute value for current locale.
      *
-     * @var \RichanFongdasen\I18n\Eloquent\TranslationModel
+     * @var \RichanFongdasen\I18n\Eloquent\TranslationModel|null
      */
-    protected $fallbackTranslation;
+    protected ?TranslationModel $fallbackTranslation;
 
     /**
      * Current selected locale.
      *
      * @var \RichanFongdasen\I18n\Locale
      */
-    protected $locale;
+    protected Locale $locale;
 
     /**
      * Default language key.
      *
      * @var string
      */
-    protected static $localeKey;
+    protected static string $localeKey;
 
     /**
      * Translation object for the current selected
      * locale.
      *
-     * @var \RichanFongdasen\I18n\Eloquent\TranslationModel
+     * @var \RichanFongdasen\I18n\Eloquent\TranslationModel|null
      */
-    protected $translation;
+    protected ?TranslationModel $translation;
 
     /**
      * Convert the model's attributes to an array.
@@ -75,19 +75,22 @@ trait TranslateableTrait
     /**
      * Create a new translation for the given locale.
      *
-     * @param \RichanFongdasen\I18n\Locale $locale
+     * @param \RichanFongdasen\I18n\Locale|null $locale
      *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
-    protected function createTranslation(Locale $locale): TranslationModel
+    protected function createTranslation(?Locale $locale): TranslationModel
     {
-        $conditions = [
-            $this->getForeignKey() => $this->getKey(),
-            'locale'               => $locale->{self::$localeKey},
-        ];
+        if ($locale === null) {
+            $locale = \I18n::defaultLocale();
+        }
 
         $model = (new TranslationModel())
-            ->fill($conditions);
+            ->setTable($this->getTranslationTable())
+            ->fill([
+                $this->getForeignKey() => $this->getKey(),
+                'locale'               => $locale->{self::$localeKey},
+            ]);
 
         $this->translations->push($model);
 
@@ -105,7 +108,7 @@ trait TranslateableTrait
     {
         foreach ($this->getTranslateableAttributes() as $key) {
             if (isset($attributes[$key])) {
-                $this->setTranslateableAttribute($key, $attributes[$key]);
+                $this->setAttribute($key, $attributes[$key]);
             }
         }
 
@@ -164,33 +167,11 @@ trait TranslateableTrait
      */
     protected function getTranslated(string $key)
     {
-        if (!$this->locale) {
-            $this->translate();
-        }
+        $this->initialize();
 
-        if ($result = $this->getTranslatedValue($this->translation, $key)) {
-            return $result;
-        }
+        $translation = $this->getTranslation($this->locale);
 
-        return $this->getTranslatedValue($this->fallbackTranslation, $key);
-    }
-
-    /**
-     * Get a translated attribute value from
-     * the given translation model.
-     *
-     * @param mixed  $translation
-     * @param string $key
-     *
-     * @return mixed
-     */
-    protected function getTranslatedValue($translation, string $key)
-    {
-        if (!$translation instanceof Model) {
-            return null;
-        }
-
-        return $translation->getAttribute($key);
+        return data_get($translation, $key) ?? data_get($this->fallbackTranslation, $key);
     }
 
     /**
@@ -201,15 +182,15 @@ trait TranslateableTrait
      *
      * @return \RichanFongdasen\I18n\Eloquent\TranslationModel
      */
-    protected function getTranslation(Locale $locale): TranslationModel
+    protected function getTranslation(?Locale $locale = null): TranslationModel
     {
         $this->translate($locale);
 
-        if ($this->translation) {
-            return $this->translation;
+        if (!($this->translation instanceof TranslationModel)) {
+            $this->translation = $this->createTranslation($locale);
         }
 
-        return $this->translation = $this->createTranslation($locale);
+        return $this->translation;
     }
 
     /**
@@ -226,7 +207,7 @@ trait TranslateableTrait
             return $key;
         }
 
-        if (empty($key)) {
+        if (($key === null) || empty($key)) {
             $key = \App::getLocale();
         }
 
@@ -254,6 +235,21 @@ trait TranslateableTrait
     }
 
     /**
+     * Initialize translateable features by setting up required properties.
+     */
+    protected function initialize(): void
+    {
+        if (!isset($this->locale)) {
+            $this->locale = $this->getTranslationLocale();
+        }
+
+        if (!isset($this->fallbackTranslation)) {
+            $locale = \I18n::defaultLocale()->{self::$localeKey};
+            $this->fallbackTranslation = $this->translations->where('locale', $locale)->first();
+        }
+    }
+
+    /**
      * Check whether the given attribute key is
      * translateable.
      *
@@ -265,7 +261,7 @@ trait TranslateableTrait
     {
         $fields = $this->getTranslateableAttributes();
 
-        return in_array($key, $fields);
+        return in_array($key, $fields, true);
     }
 
     /**
@@ -300,59 +296,26 @@ trait TranslateableTrait
     public function setAttribute($key, $value)
     {
         if ($this->isTranslateableAttribute($key)) {
-            if (!$this->locale) {
-                $this->translate();
-            }
-            if (!$this->translation instanceof TranslationModel) {
-                $this->translation = $this->getTranslation($this->locale);
+            $this->initialize();
+
+            if (is_array($value)) {
+                foreach ($value as $locale => $val) {
+                    $translation = $this->getTranslation($this->getTranslationLocale($locale));
+                    $translation->setAttribute($key, $val);
+                }
             }
 
-            $this->translation->setAttribute($key, $value);
+            if (!is_array($value)) {
+                $translation = $this->getTranslation($this->locale);
+                $translation->setAttribute($key, $value);
+            }
+
             $this->updateTimestamps();
 
             return $this;
         }
 
         return parent::setAttribute($key, $value);
-    }
-
-    /**
-     * Set fallback translation model.
-     *
-     * @return void
-     */
-    protected function setFallbackTranslation(): void
-    {
-        $locale = \I18n::defaultLocale()->{self::$localeKey};
-        $this->fallbackTranslation = $this->translations->where('locale', $locale)->first();
-    }
-
-    /**
-     * Set translateable attribute based on the
-     * given key.
-     *
-     * @param string $key
-     * @param mixed  $data
-     * @param mixed  $locale
-     *
-     * @return $this
-     */
-    protected function setTranslateableAttribute(string $key, $data, $locale = null): self
-    {
-        if (is_array($data)) {
-            foreach ($data as $language => $value) {
-                $this->setTranslateableAttribute($key, $value, $language);
-            }
-
-            return $this;
-        }
-        if (!$locale && $this->locale) {
-            $locale = $this->locale;
-        }
-        $this->translate($locale);
-        $this->setAttribute($key, $data);
-
-        return $this;
     }
 
     /**
@@ -364,9 +327,7 @@ trait TranslateableTrait
      */
     public function translate($key = null): self
     {
-        if (!$this->fallbackTranslation) {
-            $this->setFallbackTranslation();
-        }
+        $this->initialize();
 
         $this->locale = $this->getTranslationLocale($key);
 

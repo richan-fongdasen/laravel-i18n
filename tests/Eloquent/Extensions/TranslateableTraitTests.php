@@ -219,24 +219,10 @@ class TranslateableTraitTests extends DatabaseTestCase
         $product = new Product();
         $locale = \I18n::defaultLocale();
 
-        $actual = $this->invokeMethod($product, 'getTranslatedValue', [$locale, 'title']);
+        $product->translate($locale);
+        $actual = $product->getAttribute('title');
 
         $this->assertEquals(null, $actual);
-    }
-
-    /** @test */
-    public function it_returns_translated_value_based_on_the_given_translation_model()
-    {
-        $product = new Product();
-        $model = new TranslationModel();
-        $model->setTable('product_translations');
-        $translation = $model->where('product_id', 5)
-            ->where('locale', \I18n::defaultLocale()->language)
-            ->first();
-
-        $actual = $this->invokeMethod($product, 'getTranslatedValue', [$translation, 'title']);
-
-        $this->assertEquals($translation->title, $actual);
     }
 
     /** @test */
@@ -394,24 +380,12 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_can_set_single_translateable_attribute_value_with_defined_locale()
-    {
-        $product = new Product();
-        $this->invokeMethod($product, 'setTranslateableAttribute', ['title', 'Spanish title', 'es']);
-
-        $locale = \I18n::getLocale('es');
-        $translation = $this->invokeMethod($product, 'getTranslation', [$locale]);
-        $this->assertEquals('Spanish title', $translation->title);
-        $this->assertEquals(null, $translation->description);
-    }
-
-    /** @test */
     public function it_can_set_single_translateable_attribute_value_with_undefined_locale()
     {
         $product = new Product();
-        $this->invokeMethod($product, 'setTranslateableAttribute', ['title', 'English title']);
+        $product->setAttribute('title', 'English title');
         $product->translate('de');
-        $this->invokeMethod($product, 'setTranslateableAttribute', ['title', 'German title']);
+        $product->setAttribute('title', 'German title');
 
         $locale = \I18n::getLocale('en');
         $translation = $this->invokeMethod($product, 'getTranslation', [$locale]);
@@ -433,7 +407,7 @@ class TranslateableTraitTests extends DatabaseTestCase
             'es' => 'Spanish title',
             'de' => 'German title',
         ];
-        $this->invokeMethod($product, 'setTranslateableAttribute', ['title', $data]);
+        $product->setAttribute('title', $data);
         
         $locale = \I18n::getLocale('en');
         $translation = $this->invokeMethod($product, 'getTranslation', [$locale]);

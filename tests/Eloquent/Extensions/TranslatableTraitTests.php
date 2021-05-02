@@ -597,4 +597,33 @@ class TranslatableTraitTests extends DatabaseTestCase
             $this->assertEquals($locale->name . ' description 2', $product->description);
         }
     }
+    
+    /** @test */
+    public function it_can_retrieve_all_translatable_attribute_values()
+    {
+        $product = Product::create([
+            'product_category_id' => 3,
+            'title' => [
+                'en' => 'English title',
+                'es' => 'Spanish title',
+            ],
+            'description' => [
+                'en' => 'English description',
+                'es' => 'Spanish description',
+            ],
+            'published' => true
+        ]);
+        $expected = [
+            'title' => [
+                'en' => 'English title',
+                'es' => 'Spanish title',
+            ],
+            'description' => [
+                'en' => 'English description',
+                'es' => 'Spanish description',
+            ],
+        ];
+
+        self::assertEquals($expected, $product->getAllTranslatableValues());
+    }
 }

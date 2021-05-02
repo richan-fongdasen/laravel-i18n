@@ -9,6 +9,7 @@ use Illuminate\Support\Str;
 use RichanFongdasen\I18n\Eloquent\Observer;
 use RichanFongdasen\I18n\Eloquent\TranslationModel;
 use RichanFongdasen\I18n\Eloquent\TranslationScope;
+use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 
 trait Translatable
@@ -113,6 +114,57 @@ trait Translatable
         }
 
         return parent::fill($attributes);
+    }
+
+    /**
+     * Get all translatable attribute values in array.
+     *
+     * @return array
+     */
+    public function getAllTranslatableValues(): array
+    {
+        if (!$this->exists) {
+            return [];
+        }
+
+        $result = [];
+
+        $locales = app(I18nService::class)->getLocale();
+        foreach ($locales as $locale) {
+            $translation = $this->getTranslation($locale);
+            $result = $this->extractTranslatableAttributes($translation, $result);
+        }
+
+        return $result;
+    }
+
+    /**
+     * Extract the translatable attributes values,
+     * and assign them into the given array.
+     *
+     * @param TranslationModel $model
+     * @param array $result
+     * @return array
+     */
+    protected function extractTranslatableAttributes(TranslationModel $model, array $result): array
+    {
+        $ignores = [
+            'id',
+            'locale',
+            $this->getForeignKey(),
+        ];
+
+        $values = $model->toArray();
+        foreach ($values as $key => $value) {
+            if (!in_array($key, $ignores, true)) {
+                if (!isset($result[$key])) {
+                    $result[$key] = [];
+                }
+                $result[$key][$model->getAttribute('locale')] = $value;
+            }
+        }
+
+        return $result;
     }
 
     /**

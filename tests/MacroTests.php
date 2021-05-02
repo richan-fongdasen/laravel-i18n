@@ -8,7 +8,7 @@ use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 class MacroTests extends DatabaseTestCase
 {
     /** @test */
-    public function eloquent_collections_are_translateable()
+    public function eloquent_collections_are_translatable()
     {
         $products = Product::where('product_category_id', 1)->get();
 

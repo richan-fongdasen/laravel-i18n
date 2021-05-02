@@ -2,7 +2,7 @@
 
 namespace RichanFongdasen\I18n\Eloquent;
 
-use RichanFongdasen\I18n\Contracts\TranslateableModel;
+use RichanFongdasen\I18n\Contracts\TranslatableModel;
 
 class Observer
 {
@@ -21,11 +21,11 @@ class Observer
     /**
      * Listening to any saved events.
      *
-     * @param \RichanFongdasen\I18n\Contracts\TranslateableModel $model
+     * @param \RichanFongdasen\I18n\Contracts\TranslatableModel $model
      *
      * @return void
      */
-    public function saved(TranslateableModel $model): void
+    public function saved(TranslatableModel $model): void
     {
         foreach ($model->getAttribute('translations') as $translation) {
             if ($this->isDirty($translation)) {

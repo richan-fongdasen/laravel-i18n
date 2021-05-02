@@ -2,7 +2,7 @@
 
 namespace RichanFongdasen\I18n\Contracts;
 
-interface TranslateableModel
+interface TranslatableModel
 {
     /**
      * Get an attribute from the model.

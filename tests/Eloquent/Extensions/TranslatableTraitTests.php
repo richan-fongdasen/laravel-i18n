@@ -10,7 +10,7 @@ use RichanFongdasen\I18n\Tests\DatabaseTestCase;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 use RichanFongdasen\I18n\Tests\Supports\Models\ProductCategory;
 
-class TranslateableTraitTests extends DatabaseTestCase
+class TranslatableTraitTests extends DatabaseTestCase
 {
     /** @test */
     public function it_will_merge_the_translation_attributes_on_array_serialization()
@@ -168,12 +168,12 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_returns_all_of_the_translateable_attributes()
+    public function it_returns_all_of_the_translatable_attributes()
     {
         $product = new Product();
 
         $expected = ['title', 'description'];
-        $actual = $this->invokeMethod($product, 'getTranslateableAttributes');
+        $actual = $this->invokeMethod($product, 'getTranslatableAttributes');
 
         $this->assertEquals($expected, $actual);
     }
@@ -312,13 +312,13 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_can_identify_translateable_attributes_correctly()
+    public function it_can_identify_translatable_attributes_correctly()
     {
         $product = new Product();
 
-        $this->assertTrue($this->invokeMethod($product, 'isTranslateableAttribute', ['title']));
-        $this->assertTrue($this->invokeMethod($product, 'isTranslateableAttribute', ['description']));
-        $this->assertFalse($this->invokeMethod($product, 'isTranslateableAttribute', ['price']));
+        $this->assertTrue($this->invokeMethod($product, 'isTranslatableAttribute', ['title']));
+        $this->assertTrue($this->invokeMethod($product, 'isTranslatableAttribute', ['description']));
+        $this->assertFalse($this->invokeMethod($product, 'isTranslatableAttribute', ['price']));
     }
 
     /** @test */
@@ -339,7 +339,7 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_can_set_translateable_attributes_using_magic_set_method()
+    public function it_can_set_translatable_attributes_using_magic_set_method()
     {
         $product = new Product();
         $product->title = 'English title';
@@ -380,7 +380,7 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_can_set_single_translateable_attribute_value_with_undefined_locale()
+    public function it_can_set_single_translatable_attribute_value_with_undefined_locale()
     {
         $product = new Product();
         $product->setAttribute('title', 'English title');
@@ -399,7 +399,7 @@ class TranslateableTraitTests extends DatabaseTestCase
     }
 
     /** @test */
-    public function it_can_set_multiple_translateable_attribute_value_with_multiple_languages()
+    public function it_can_set_multiple_translatable_attribute_value_with_multiple_languages()
     {
         $product = new Product();
         $data = [

@@ -11,7 +11,7 @@ use RichanFongdasen\I18n\Eloquent\TranslationModel;
 use RichanFongdasen\I18n\Eloquent\TranslationScope;
 use RichanFongdasen\I18n\Locale;
 
-trait TranslateableTrait
+trait Translatable
 {
     /**
      * Fallback translation object. The model will use
@@ -53,7 +53,7 @@ trait TranslateableTrait
     {
         $attributes = parent::attributesToArray();
 
-        foreach ($this->getTranslateableAttributes() as $key) {
+        foreach ($this->getTranslatableAttributes() as $key) {
             $attributes[$key] = $this->getAttribute($key);
         }
 
@@ -61,11 +61,11 @@ trait TranslateableTrait
     }
 
     /**
-     * Boot the TranslateableTrait model extension.
+     * Boot the Translatable trait model extension.
      *
      * @return void
      */
-    public static function bootTranslateableTrait(): void
+    public static function bootTranslatable(): void
     {
         static::addGlobalScope(new TranslationScope());
         static::observe(app(Observer::class));
@@ -106,7 +106,7 @@ trait TranslateableTrait
      */
     public function fill(array $attributes): self
     {
-        foreach ($this->getTranslateableAttributes() as $key) {
+        foreach ($this->getTranslatableAttributes() as $key) {
             if (isset($attributes[$key])) {
                 $this->setAttribute($key, $attributes[$key]);
             }
@@ -124,7 +124,7 @@ trait TranslateableTrait
      */
     public function getAttribute($key)
     {
-        if ($this->isTranslateableAttribute($key)) {
+        if ($this->isTranslatableAttribute($key)) {
             return $this->getTranslated($key);
         }
 
@@ -140,7 +140,7 @@ trait TranslateableTrait
     {
         $attributes = [$this->getTable().'.*'];
 
-        foreach ($this->getTranslateableAttributes() as $attribute) {
+        foreach ($this->getTranslatableAttributes() as $attribute) {
             $attributes[] = $this->getTranslationTable().'.'.$attribute;
         }
 
@@ -148,11 +148,11 @@ trait TranslateableTrait
     }
 
     /**
-     * Get all of translateable attributes.
+     * Get all of translatable attributes.
      *
      * @return array
      */
-    public function getTranslateableAttributes(): array
+    public function getTranslatableAttributes(): array
     {
         return is_array($this->translateFields) ? $this->translateFields : [];
     }
@@ -235,7 +235,7 @@ trait TranslateableTrait
     }
 
     /**
-     * Initialize translateable features by setting up required properties.
+     * Initialize translatable features by setting up required properties.
      */
     protected function initialize(): void
     {
@@ -251,15 +251,15 @@ trait TranslateableTrait
 
     /**
      * Check whether the given attribute key is
-     * translateable.
+     * translatable.
      *
      * @param string $key
      *
      * @return bool
      */
-    protected function isTranslateableAttribute(string $key): bool
+    protected function isTranslatableAttribute(string $key): bool
     {
-        $fields = $this->getTranslateableAttributes();
+        $fields = $this->getTranslatableAttributes();
 
         return in_array($key, $fields, true);
     }
@@ -295,7 +295,7 @@ trait TranslateableTrait
      */
     public function setAttribute($key, $value)
     {
-        if ($this->isTranslateableAttribute($key)) {
+        if ($this->isTranslatableAttribute($key)) {
             $this->initialize();
 
             if (is_array($value)) {

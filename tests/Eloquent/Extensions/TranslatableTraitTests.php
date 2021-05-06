@@ -15,7 +15,10 @@ class TranslatableTraitTests extends DatabaseTestCase
     /** @test */
     public function it_will_merge_the_translation_attributes_on_array_serialization()
     {
-        $product = Product::find(8)->translate('es')->toArray();
+        $product = Product::find(8)
+            ->translate('es')
+            ->setAppends(['title', 'description'])
+            ->toArray();
 
         $expected = \DB::table('product_translations')
             ->where('product_id', 8)

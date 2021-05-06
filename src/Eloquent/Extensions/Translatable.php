@@ -31,35 +31,12 @@ trait Translatable
     protected Locale $locale;
 
     /**
-     * Default language key.
-     *
-     * @var string
-     */
-    protected static string $localeKey;
-
-    /**
      * Translation object for the current selected
      * locale.
      *
      * @var \RichanFongdasen\I18n\Eloquent\TranslationModel|null
      */
     protected ?TranslationModel $translation;
-
-    /**
-     * Convert the model's attributes to an array.
-     *
-     * @return array
-     */
-    public function attributesToArray(): array
-    {
-        $attributes = parent::attributesToArray();
-
-        foreach ($this->getTranslatableAttributes() as $key) {
-            $attributes[$key] = $this->getAttribute($key);
-        }
-
-        return $attributes;
-    }
 
     /**
      * Boot the Translatable trait model extension.
@@ -70,7 +47,6 @@ trait Translatable
     {
         static::addGlobalScope(new TranslationScope());
         static::observe(app(Observer::class));
-        static::$localeKey = \I18n::getConfig('language_key');
     }
 
     /**
@@ -86,11 +62,12 @@ trait Translatable
             $locale = \I18n::defaultLocale();
         }
 
+        $localeKey = config('i18n.language_key', 'language');
         $model = (new TranslationModel())
             ->setTable($this->getTranslationTable())
             ->fill([
                 $this->getForeignKey() => $this->getKey(),
-                'locale'               => $locale->{self::$localeKey},
+                'locale'               => $locale->{$localeKey},
             ]);
 
         $this->translations->push($model);
@@ -297,7 +274,8 @@ trait Translatable
         }
 
         if (!isset($this->fallbackTranslation)) {
-            $locale = \I18n::defaultLocale()->{self::$localeKey};
+            $localeKey = config('i18n.language_key', 'language');
+            $locale = \I18n::defaultLocale()->{$localeKey};
             $this->fallbackTranslation = $this->translations->where('locale', $locale)->first();
         }
     }
@@ -384,7 +362,8 @@ trait Translatable
 
         $this->locale = $this->getTranslationLocale($key);
 
-        $key = $this->locale->{self::$localeKey};
+        $localeKey = config('i18n.language_key', 'language');
+        $key = $this->locale->{$localeKey};
         $this->translation = $this->translations->where('locale', $key)->first();
 
         return $this;

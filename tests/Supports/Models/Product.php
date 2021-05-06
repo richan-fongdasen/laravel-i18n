@@ -23,6 +23,16 @@ class Product extends Model implements TranslatableModel
         'description'
     ];
 
+    public function getTitleAttribute(): string
+    {
+        return (string) $this->getAttribute('title');
+    }
+
+    public function getDescriptionAttribute(): string
+    {
+        return (string) $this->getAttribute('description');
+    }
+
     public function category()
     {
         return $this->belongsTo(ProductCategory::class, 'product_category_id');

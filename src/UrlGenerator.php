@@ -121,7 +121,7 @@ class UrlGenerator
     {
         $this->stripLocaleFromPath();
 
-        $index = (int) $this->i18n->getConfig('locale_url_segment');
+        $index = (int) config('i18n.locale_url_segment');
         array_splice($this->path, $index, 0, $locale->{$this->key});
 
         $path = implode('/', $this->path);
@@ -170,7 +170,7 @@ class UrlGenerator
      */
     public function stripLocaleFromPath(): void
     {
-        $index = (int) $this->i18n->getConfig('locale_url_segment');
+        $index = (int) config('i18n.locale_url_segment');
         $locale = $this->i18n->getLocale($this->path[$index]);
 
         if ($locale instanceof Locale) {

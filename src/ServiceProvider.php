@@ -5,6 +5,9 @@ namespace RichanFongdasen\I18n;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as Provider;
+use RichanFongdasen\I18n\Commands\RouteTranslationsCacheCommand;
+use RichanFongdasen\I18n\Commands\RouteTranslationsClearCommand;
+use RichanFongdasen\I18n\Commands\RouteTranslationsListCommand;
 
 class ServiceProvider extends Provider
 {
@@ -17,6 +20,7 @@ class ServiceProvider extends Provider
     {
         $this->publishAssets();
         $this->registerMacro();
+        $this->registerCommands();
     }
 
     /**
@@ -69,5 +73,16 @@ class ServiceProvider extends Provider
                 return $key;
             });
         });
+    }
+
+    protected function registerCommands()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                RouteTranslationsCacheCommand::class,
+                RouteTranslationsClearCommand::class,
+                RouteTranslationsListCommand::class,
+            ]);
+        }
     }
 }

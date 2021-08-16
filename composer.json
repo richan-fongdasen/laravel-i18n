@@ -33,7 +33,7 @@
         "nesbot/carbon": "^2.16"
     },
     "require-dev": {
-        "ekino/phpstan-banned-code": "^0.4",
+        "ekino/phpstan-banned-code": "^0.4 || ^0.5",
         "fakerphp/faker": "^1.14",
         "mockery/mockery": "^1.4",
         "nunomaduro/larastan": "^0.7",

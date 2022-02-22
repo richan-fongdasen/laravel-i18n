@@ -17,9 +17,9 @@ use RichanFongdasen\I18n\Locale;
 /**
  * Translatable trait.
  *
- * @property string[] $translates
+ * @property string[]                                 $translates
  * @property \Illuminate\Database\Eloquent\Collection $translations
- * @property string|null $translationTable
+ * @property string|null                              $translationTable
  */
 trait Translatable
 {
@@ -33,8 +33,9 @@ trait Translatable
     /**
      * Boot the Translatable trait model extension.
      *
-     * @return void
      * @throws ErrorException
+     *
+     * @return void
      */
     public static function bootTranslatable(): void
     {
@@ -50,10 +51,11 @@ trait Translatable
      * Fill the model with an array of attributes.
      *
      * @param array $attributes
-     * @return $this
      *
      * @throws \Illuminate\Database\Eloquent\MassAssignmentException
      * @throws ErrorException
+     *
+     * @return $this
      */
     public function fill(array $attributes)
     {
@@ -69,8 +71,9 @@ trait Translatable
     /**
      * Get all translatable attribute values in array.
      *
-     * @return array
      * @throws ErrorException
+     *
+     * @return array
      */
     public function getAllTranslationValues(): array
     {
@@ -95,8 +98,10 @@ trait Translatable
      * Get an attribute from the model.
      *
      * @param string $key
-     * @return mixed
+     *
      * @throws ErrorException
+     *
+     * @return mixed
      */
     public function getAttribute($key)
     {
@@ -168,10 +173,11 @@ trait Translatable
      * Set a given attribute on the model.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
+     * @throws ErrorException
      *
      * @return mixed
-     * @throws ErrorException
      */
     public function setAttribute($key, $value)
     {
@@ -204,8 +210,9 @@ trait Translatable
      *
      * @param Locale|string $locale
      *
-     * @return $this
      * @throws ErrorException
+     *
+     * @return $this
      */
     public function translate($locale): self
     {
@@ -227,8 +234,9 @@ trait Translatable
      *
      * @param Locale|null $locale
      *
-     * @return TranslationModel
      * @throws ErrorException
+     *
+     * @return TranslationModel
      */
     public function translation(?Locale $locale = null): TranslationModel
     {

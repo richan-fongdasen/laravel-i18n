@@ -11,18 +11,20 @@ interface TranslatableModel
      * Fill the model with an array of attributes.
      *
      * @param array $attributes
-     * @return $this
      *
      * @throws \Illuminate\Database\Eloquent\MassAssignmentException
      * @throws \ErrorException
+     *
+     * @return $this
      */
     public function fill(array $attributes);
 
     /**
      * Get all translatable attribute values in array.
      *
-     * @return array
      * @throws \ErrorException
+     *
+     * @return array
      */
     public function getAllTranslationValues(): array;
 
@@ -76,10 +78,11 @@ interface TranslatableModel
      * Set a given attribute on the model.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
+     *
+     * @throws \ErrorException
      *
      * @return mixed
-     * @throws \ErrorException
      */
     public function setAttribute($key, $value);
 
@@ -88,8 +91,9 @@ interface TranslatableModel
      *
      * @param Locale|string $locale
      *
-     * @return $this
      * @throws \ErrorException
+     *
+     * @return $this
      */
     public function translate($locale): self;
 
@@ -98,8 +102,9 @@ interface TranslatableModel
      *
      * @param Locale|null $locale
      *
-     * @return TranslationModel
      * @throws \ErrorException
+     *
+     * @return TranslationModel
      */
     public function translation(?Locale $locale = null): TranslationModel;
 }

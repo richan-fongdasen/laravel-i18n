@@ -29,7 +29,7 @@ class I18nService
      * I18nService constructor.
      *
      * @param LocaleRepository $repository
-     * @param Request $request
+     * @param Request          $request
      */
     public function __construct(LocaleRepository $repository, Request $request)
     {
@@ -60,8 +60,9 @@ class I18nService
     /**
      * Get the default locale.
      *
-     * @return Locale
      * @throws \ErrorException
+     *
+     * @return Locale
      */
     public function getDefaultLocale(): Locale
     {
@@ -72,20 +73,23 @@ class I18nService
      * Get locale based on the given key.
      *
      * @param string $key
+     *
      * @return Locale|null
      */
     public function getLocale(string $key): ?Locale
     {
         $key = Str::replace('_', '-', $key);
+
         return $this->repository->get($key);
     }
 
     /**
      * Get locale keys in array based on the given attribute name.
      * If there was no attribute name specified, it will use
-     * the default attribute name defined in config i18n.language_key
+     * the default attribute name defined in config i18n.language_key.
      *
      * @param string|null $attributeName
+     *
      * @return array|null
      */
     public function getLocaleKeys(?string $attributeName = null): ?array
@@ -97,6 +101,7 @@ class I18nService
      * Guess the translation table name for the given model class name.
      *
      * @param string $modelName
+     *
      * @return string
      */
     public function guessTranslationTable(string $modelName): string

@@ -30,7 +30,7 @@ abstract class AbstractRepository implements LocaleRepository
      *
      * @var string[]
      */
-    static protected array $possibleKeys = [
+    protected static array $possibleKeys = [
         'language',
         'ietfCode',
     ];
@@ -70,6 +70,7 @@ abstract class AbstractRepository implements LocaleRepository
      * Get locale based on the given key.
      *
      * @param string $key
+     *
      * @return Locale|null
      */
     public function get(string $key): ?Locale
@@ -88,9 +89,10 @@ abstract class AbstractRepository implements LocaleRepository
     /**
      * Get locale keys in array based on the given attribute name.
      * If there was no attribute name specified, it will use
-     * the default attribute name defined in config i18n.language_key
+     * the default attribute name defined in config i18n.language_key.
      *
      * @param string|null $attributeName
+     *
      * @return array|null
      */
     public function getKeys(?string $attributeName = null): ?array
@@ -111,8 +113,9 @@ abstract class AbstractRepository implements LocaleRepository
     /**
      * Initialize the Locale Repository.
      *
-     * @return void
      * @throws ErrorException
+     *
+     * @return void
      */
     protected function initialize(): void
     {

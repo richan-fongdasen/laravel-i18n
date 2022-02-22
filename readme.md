@@ -19,7 +19,7 @@ This package provides easy ways to setup database translation and route localiza
 * [Setup](#setup)
 * [Publish package assets](#publish-package-assets)
 * [Configuration](#configuration)
-* [Usage](#usage)
+* [Documentation](#documentation)
 * [Credits](#credits)
 * [License](#license)
 
@@ -163,9 +163,9 @@ return [
 ];
 ```
 
-## Usage
+## Documentation
 
-This section is currently under construction.
+Please check the documentation here [https://laravel-i18n.richan.id/](https://laravel-i18n.richan.id/)
 
 ## Credits
 

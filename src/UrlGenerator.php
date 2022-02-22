@@ -2,8 +2,6 @@
 
 namespace RichanFongdasen\I18n;
 
-use RichanFongdasen\I18n\Facade\I18n;
-
 class UrlGenerator
 {
     /**

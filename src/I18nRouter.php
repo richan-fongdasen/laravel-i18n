@@ -25,7 +25,7 @@ class I18nRouter
     /**
      * I18nRouter constructor.
      *
-     * @param Request $request
+     * @param Request     $request
      * @param I18nService $service
      */
     public function __construct(Request $request, I18nService $service)
@@ -37,8 +37,9 @@ class I18nRouter
     /**
      * Get the route prefix.
      *
-     * @return string
      * @throws \ErrorException
+     *
+     * @return string
      */
     public function getPrefix(): string
     {
@@ -70,11 +71,12 @@ class I18nRouter
     /**
      * Generate a localized URL for the application.
      *
-     * @param string $url
+     * @param string             $url
      * @param Locale|string|null $locale
      *
-     * @return string
      * @throws ErrorException
+     *
+     * @return string
      */
     public function url(string $url, $locale = null): string
     {

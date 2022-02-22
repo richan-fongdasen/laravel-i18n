@@ -8,6 +8,7 @@ class Locale
      * Country code.
      *
      * @readonly
+     *
      * @var string
      */
     public string $country;
@@ -16,6 +17,7 @@ class Locale
      * IETF Code.
      *
      * @readonly
+     *
      * @var string
      */
     public string $ietfCode;
@@ -24,6 +26,7 @@ class Locale
      * Language code.
      *
      * @readonly
+     *
      * @var string
      */
     public string $language;
@@ -32,6 +35,7 @@ class Locale
      * Locale name.
      *
      * @readonly
+     *
      * @var string
      */
     public string $name;
@@ -54,7 +58,7 @@ class Locale
 
     /**
      * Get locale key based on the attribute name defined in configuration:
-     * i18n.language_key
+     * i18n.language_key.
      *
      * @return string
      */

@@ -3,7 +3,6 @@
 namespace RichanFongdasen\I18n;
 
 use ErrorException;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as Provider;
@@ -52,7 +51,7 @@ class ServiceProvider extends Provider
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/i18n.php', 'i18n');
 
-        $this->app->scoped(LocaleRepository::class,  static function () {
+        $this->app->scoped(LocaleRepository::class, static function () {
             $allowedDriver = ['json', 'database'];
             $driver = (string) config('i18n.driver');
 
@@ -60,7 +59,7 @@ class ServiceProvider extends Provider
                 throw new ErrorException('Invalid locale repository driver defined in config i18n.driver');
             }
 
-            return ($driver === 'json') ? new JsonRepository : new DatabaseRepository;
+            return ($driver === 'json') ? new JsonRepository() : new DatabaseRepository();
         });
 
         $this->app->scoped(I18nService::class, function () {

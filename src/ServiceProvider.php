@@ -74,10 +74,10 @@ class ServiceProvider extends Provider
      */
     protected function registerMacro(): void
     {
-        Collection::macro('translate', function ($locale) {
+        Collection::macro('translateTo', function ($locale) {
             $this->each(function ($item, $key) use ($locale) {
                 if ($item instanceof TranslatableModel) {
-                    $item->translate($locale);
+                    $item->translateTo($locale);
                 }
 
                 return $key;

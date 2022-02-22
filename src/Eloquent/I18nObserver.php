@@ -19,7 +19,7 @@ class I18nObserver
      */
     public function retrieved(TranslatableModel $model): void
     {
-        $model->translate(App::getLocale());
+        $model->translateTo(App::getLocale());
     }
 
     /**

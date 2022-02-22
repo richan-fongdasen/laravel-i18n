@@ -95,7 +95,7 @@ interface TranslatableModel
      *
      * @return $this
      */
-    public function translate($locale): self;
+    public function translateTo($locale): self;
 
     /**
      * Resolve and get the translation model for current locale.

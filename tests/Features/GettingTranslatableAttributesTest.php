@@ -99,7 +99,7 @@ class GettingTranslatableAttributesTest extends TestCase
     /** @test */
     public function it_can_translate_the_model_based_on_the_given_locale_key()
     {
-        $product = Product::find(9)->translate('de');
+        $product = Product::find(9)->translateTo('de');
 
         $expected = DB::table('product_translations')
             ->where('product_id', 9)
@@ -145,7 +145,7 @@ class GettingTranslatableAttributesTest extends TestCase
     public function it_will_merge_the_translation_attributes_on_array_serialization()
     {
         $product = Product::find(8)
-            ->translate('es')
+            ->translateTo('es')
             ->setAppends(['title', 'description']);
 
         $translation = \DB::table('product_translations')
@@ -170,7 +170,7 @@ class GettingTranslatableAttributesTest extends TestCase
     {
         $products = Product::where('product_category_id', 1)->get();
 
-        $products->translate('de');
+        $products->translateTo('de');
 
         foreach ($products as $product) {
             $translation = \DB::table('product_translations')

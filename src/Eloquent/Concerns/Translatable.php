@@ -43,7 +43,7 @@ trait Translatable
         static::observe(app(I18nObserver::class));
 
         static::registerModelEvent('booted', static function (TranslatableModel $model) {
-            $model->translate(App::getLocale());
+            $model->translateTo(App::getLocale());
         });
     }
 
@@ -214,7 +214,7 @@ trait Translatable
      *
      * @return $this
      */
-    public function translate($locale): self
+    public function translateTo($locale): self
     {
         if (is_string($locale)) {
             $locale = I18n::getLocale($locale);

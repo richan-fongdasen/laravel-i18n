@@ -12,7 +12,7 @@ class TranslatableTest extends TestCase
     public function it_can_create_new_translation_model_based_on_the_given_locale()
     {
         $product = new Product();
-        $product->translate('es');
+        $product->translateTo('es');
 
         $translation = $product->translation();
 
@@ -46,14 +46,14 @@ class TranslatableTest extends TestCase
         $this->assertEquals(null, $product->getAttribute('published'));
 
         foreach (I18n::getAllLocale() as $locale) {
-            $product->translate($locale);
+            $product->translateTo($locale);
 
             $this->assertEquals($locale->name . ' title', $product->title);
             $this->assertEquals($locale->name . ' description', $product->description);
         }
 
         $this->expectException(\ErrorException::class);
-        $product->translate('id');
+        $product->translateTo('id');
     }
 
     /** @test */
@@ -74,11 +74,11 @@ class TranslatableTest extends TestCase
             'published' => true
         ]);
 
-        $product->translate('es');
+        $product->translateTo('es');
         $this->assertEquals('English title', $product->title);
         $this->assertEquals('Spanish description', $product->description);
 
-        $product->translate('de');
+        $product->translateTo('de');
         $this->assertEquals('German title', $product->title);
         $this->assertEquals('English description', $product->description);
     }

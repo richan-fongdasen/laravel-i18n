@@ -18,15 +18,15 @@ class SavingTranslatableAttributesTest extends TestCase
             'product_category_id' => 3,
             'published' => true
         ]);
-        $product->translate('en');
+        $product->translateTo('en');
         $product->title = 'English title';
         $product->description = 'English description';
 
-        $product->translate('es');
+        $product->translateTo('es');
         $product->title = 'Spanish title';
         $product->description = 'Spanish description';
 
-        $product->translate('de');
+        $product->translateTo('de');
         $product->title = 'German title';
         $product->description = 'German description';
 
@@ -35,7 +35,7 @@ class SavingTranslatableAttributesTest extends TestCase
         $product = Product::orderBy('id', 'desc')->first();
 
         foreach (I18n::getAllLocale() as $locale) {
-            $product->translate($locale);
+            $product->translateTo($locale);
 
             self::assertEquals($locale->name . ' title', $product->title);
             self::assertEquals($locale->name . ' description', $product->description);
@@ -64,7 +64,7 @@ class SavingTranslatableAttributesTest extends TestCase
         $product = Product::orderBy('id', 'desc')->first();
 
         foreach (I18n::getAllLocale() as $locale) {
-            $product->translate($locale);
+            $product->translateTo($locale);
 
             self::assertEquals($locale->name . ' title', $product->title);
             self::assertEquals($locale->name . ' description', $product->description);
@@ -91,15 +91,15 @@ class SavingTranslatableAttributesTest extends TestCase
 
         $product = Product::orderBy('id', 'desc')->first();
 
-        $product->translate('en');
+        $product->translateTo('en');
         self::assertEquals('English title', $product->title);
         self::assertEquals('English description', $product->description);
 
-        $product->translate('es');
+        $product->translateTo('es');
         self::assertEquals('English title', $product->title);
         self::assertEquals('Spanish description', $product->description);
 
-        $product->translate('de');
+        $product->translateTo('de');
         self::assertEquals('German title', $product->title);
         self::assertEquals('English description', $product->description);
     }
@@ -160,7 +160,7 @@ class SavingTranslatableAttributesTest extends TestCase
         $product = Product::find($original->id);
 
         foreach (I18n::getAllLocale() as $locale) {
-            $product->translate($locale);
+            $product->translateTo($locale);
 
             self::assertEquals($locale->name . ' title 2', $product->title);
             self::assertEquals($locale->name . ' description 2', $product->description);
@@ -176,7 +176,7 @@ class SavingTranslatableAttributesTest extends TestCase
         $original->title = 'English title';
         $original->description = 'English description';
         // Spanish value
-        $original->translate('es');
+        $original->translateTo('es');
         $original->title = 'Spanish title';
         $original->description = 'Spanish description';
         $original->save();
@@ -186,11 +186,11 @@ class SavingTranslatableAttributesTest extends TestCase
         $product->title = 'English title 2';
         $product->description = 'English description 2';
         // Spanish value
-        $product->translate('es');
+        $product->translateTo('es');
         $product->title = 'Spanish title 2';
         $product->description = 'Spanish description 2';
         // German value
-        $product->translate('de');
+        $product->translateTo('de');
         $product->title = 'German title 2';
         $product->description = 'German description 2';
         $product->save();
@@ -198,7 +198,7 @@ class SavingTranslatableAttributesTest extends TestCase
         $product = Product::find($original->id);
 
         foreach (I18n::getAllLocale() as $locale) {
-            $product->translate($locale);
+            $product->translateTo($locale);
 
             self::assertEquals($locale->name . ' title 2', $product->title);
             self::assertEquals($locale->name . ' description 2', $product->description);

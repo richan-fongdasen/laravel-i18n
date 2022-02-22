@@ -204,4 +204,76 @@ class SavingTranslatableAttributesTest extends TestCase
             self::assertEquals($locale->name . ' description 2', $product->description);
         }
     }
+
+    /** @test */
+    public function it_can_be_filled_and_saved_with_alternative_data_structure()
+    {
+        $product = new Product();
+        $product->fill([
+            'product_category_id' => 3,
+            'en' => [
+                'title'       => 'English title',
+                'description' => 'English description',
+            ],
+            'es' => [
+                'title'       => 'Spanish title',
+                'description' => 'Spanish description',
+            ],
+            'de' => [
+                'title'       => 'German title',
+                'description' => 'German description',
+            ],
+            'published' => true
+        ])->save();
+
+        $product = Product::orderBy('id', 'desc')->first();
+
+        foreach (I18n::getAllLocale() as $locale) {
+            $product->translateTo($locale);
+
+            self::assertEquals($locale->name . ' title', $product->title);
+            self::assertEquals($locale->name . ' description', $product->description);
+        }
+    }
+
+    /** @test */
+    public function it_can_be_filled_and_updated_with_alternative_data_structure()
+    {
+        $original = Product::create([
+            'product_category_id' => 3,
+            'en' => [
+                'title'       => 'English title',
+                'description' => 'English description',
+            ],
+            'es' => [
+                'title'       => 'Spanish title',
+                'description' => 'Spanish description',
+            ],
+            'published' => true
+        ]);
+
+        $product = Product::find($original->id);
+        $product->fill([
+            'en' => [
+                'title'       => 'English title 2',
+                'description' => 'English description 2',
+            ],
+            'es' => [
+                'title'       => 'Spanish title 2',
+                'description' => 'Spanish description 2',
+            ],
+            'de' => [
+                'title'       => 'German title 2',
+                'description' => 'German description 2',
+            ],
+        ])->save();
+        $product = Product::find($original->id);
+
+        foreach (I18n::getAllLocale() as $locale) {
+            $product->translateTo($locale);
+
+            self::assertEquals($locale->name . ' title 2', $product->title);
+            self::assertEquals($locale->name . ' description 2', $product->description);
+        }
+    }
 }

@@ -59,6 +59,18 @@ trait Translatable
      */
     public function fill(array $attributes)
     {
+        foreach (I18n::getLocaleKeys() as $key) {
+            if (!isset($attributes[$key])) {
+                continue;
+            }
+
+            foreach ($this->getTranslatableAttributes() as $columnName) {
+                if (isset($attributes[$key][$columnName])) {
+                    $this->translation(I18n::getLocale($key))->setAttribute($columnName, $attributes[$key][$columnName]);
+                }
+            }
+        }
+
         foreach ($this->getTranslatableAttributes() as $columnName) {
             if (isset($attributes[$columnName])) {
                 $this->setAttribute($columnName, $attributes[$columnName]);

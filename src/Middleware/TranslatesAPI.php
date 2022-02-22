@@ -3,12 +3,11 @@
 namespace RichanFongdasen\I18n\Middleware;
 
 use Closure;
-use ErrorException;
 use Illuminate\Http\Request;
-use RichanFongdasen\I18n\Contracts\LanguageNegotiator;
+use Illuminate\Support\Facades\App;
 use RichanFongdasen\I18n\I18nService;
 
-class NegotiateLanguage
+class TranslatesAPI
 {
     /**
      * I18n service instance.
@@ -33,23 +32,18 @@ class NegotiateLanguage
      * @param \Illuminate\Http\Request $request
      * @param \Closure(\Illuminate\Http\Request): (\Illuminate\Http\Response|\Illuminate\Http\RedirectResponse)  $next
      * @return \Illuminate\Http\Response|\Illuminate\Http\RedirectResponse
-     * @throws ErrorException
+     * @throws \ErrorException
      */
     public function handle(Request $request, Closure $next)
     {
-        if ($this->service->router()->locale() === null) {
-            $negotiator = app((string) config('i18n.negotiator'));
+        $key = (string) config('i18n.api_query_key', 'lang');
+        $locale = $this->service->getLocale((string) $request->input($key));
 
-            /** @phpstan-ignore-next-line */
-            if (!($negotiator instanceof LanguageNegotiator)) {
-                throw new ErrorException('Invalid language negotiator defined in config i18n.negotiator');
-            }
-
-            /** @phpstan-ignore-next-line */
-            $locale = $negotiator->preferredLocale($request);
-
-            return redirect($this->service->router()->url($request->fullUrl(), $locale));
+        if ($locale === null) {
+            $locale = $this->service->getDefaultLocale();
         }
+
+        App::setLocale($locale->getKey());
 
         return $next($request);
     }

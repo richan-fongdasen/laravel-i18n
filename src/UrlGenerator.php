@@ -2,6 +2,8 @@
 
 namespace RichanFongdasen\I18n;
 
+use RichanFongdasen\I18n\Facade\I18n;
+
 class UrlGenerator
 {
     /**
@@ -9,7 +11,7 @@ class UrlGenerator
      *
      * @var string
      */
-    protected $scheme;
+    protected string $scheme;
 
     /**
      * Basic HTTP Authentication
@@ -17,7 +19,7 @@ class UrlGenerator
      *
      * @var string
      */
-    protected $user;
+    protected string $user;
 
     /**
      * Basic HTTP Authentication
@@ -25,74 +27,70 @@ class UrlGenerator
      *
      * @var string
      */
-    protected $pass;
+    protected string $password;
 
     /**
      * Hostname.
      *
      * @var string
      */
-    protected $host;
+    protected string $host;
 
     /**
      * HTTP port number.
      *
      * @var string
      */
-    protected $port;
+    protected string $port;
 
     /**
      * Request path.
      *
      * @var array
      */
-    protected $path;
+    protected array $path;
 
     /**
      * Query string.
      *
      * @var string
      */
-    protected $query;
+    protected string $query;
 
     /**
-     * Fragment identifyer.
+     * Fragment identifier.
      *
      * @var string
      */
-    protected $fragment;
+    protected string $fragment;
 
     /**
-     * Default language key.
-     *
-     * @var string
-     */
-    protected $key;
-
-    /**
-     * I18n service instance.
+     * The I18nService instance.
      *
      * @var I18nService
      */
-    protected $i18n;
+    protected I18nService $service;
 
     /**
      * Class constructor.
      *
-     * @param I18nService $i18n
-     * @param string      $key
+     * @param I18nService $service
+     * @param string|null $url
      */
-    public function __construct(I18nService $i18n, string $key)
+    public function __construct(I18nService $service, ?string $url = null)
     {
-        $this->i18n = $i18n;
-        $this->key = $key;
+        $this->service = $service;
+
+        if ($url !== null) {
+            $this->set($url);
+        }
     }
 
     /**
      * Extract URL information and format it
      * to fit our needs.
      *
-     * @param mixed  $url
+     * @param array  $url
      * @param string $key
      * @param string $default
      * @param string $prefix
@@ -100,13 +98,26 @@ class UrlGenerator
      *
      * @return string
      */
-    private function extract($url, string $key, string $default = '', string $prefix = '', string $suffix = ''): string
+    private function extract(array $url, string $key, string $default = '', string $prefix = '', string $suffix = ''): string
     {
-        if (empty($url)) {
+        if ($url === []) {
             return $default;
         }
 
         return isset($url[$key]) ? $prefix.$url[$key].$suffix : $default;
+    }
+
+    /**
+     * Get the url in string format.
+     *
+     * @return string
+     */
+    public function get(): string
+    {
+        $path = implode('/', $this->path);
+
+        return $this->scheme.$this->user.$this->password.$this->host.
+            $this->port.$path.$this->query.$this->fragment;
     }
 
     /**
@@ -115,19 +126,16 @@ class UrlGenerator
      *
      * @param \RichanFongdasen\I18n\Locale $locale
      *
-     * @return string
+     * @return self
      */
-    public function localize(Locale $locale): string
+    public function localize(Locale $locale): self
     {
-        $this->stripLocaleFromPath();
+        $this->stripLocale();
 
         $index = (int) config('i18n.locale_url_segment');
-        array_splice($this->path, $index, 0, $locale->{$this->key});
+        array_splice($this->path, $index, 0, $locale->getKey());
 
-        $path = implode('/', $this->path);
-
-        return $this->scheme.$this->user.$this->pass.$this->host.
-            $this->port.$path.$this->query.$this->fragment;
+        return $this;
     }
 
     /**
@@ -136,26 +144,26 @@ class UrlGenerator
      *
      * @param string $url
      *
-     * @return $this
+     * @return self
      */
-    public function setUrl(string $url): self
+    public function set(string $url): self
     {
-        $url = parse_url($url);
+        $data = (array) parse_url($url);
 
-        $this->scheme = $this->extract($url, 'scheme', '//', '', '://');
-        $this->user = $this->extract($url, 'user');
-        $this->pass = $this->extract($url, 'pass', '', ':', '@');
-        $this->host = $this->extract($url, 'host');
-        $this->port = $this->extract($url, 'port', '', ':');
-        $this->path = explode('/', $this->extract($url, 'path', '/'));
-        $this->query = $this->extract($url, 'query', '', '?');
-        $this->fragment = $this->extract($url, 'fragment', '', '#');
+        $this->scheme = $this->extract($data, 'scheme', '//', '', '://');
+        $this->user = $this->extract($data, 'user');
+        $this->password = $this->extract($data, 'pass', '', ':', '@');
+        $this->host = $this->extract($data, 'host');
+        $this->port = $this->extract($data, 'port', '', ':');
+        $this->path = explode('/', $this->extract($data, 'path', '/'));
+        $this->query = $this->extract($data, 'query', '', '?');
+        $this->fragment = $this->extract($data, 'fragment', '', '#');
 
-        if (!$this->user) {
-            $this->pass = '';
+        if ($this->user === '') {
+            $this->password = '';
         }
 
-        if (!$this->host) {
+        if ($this->host === '') {
             $this->scheme = '';
         }
 
@@ -166,15 +174,17 @@ class UrlGenerator
      * Strip any locale keyword from the current
      * URL path.
      *
-     * @return void
+     * @return self
      */
-    public function stripLocaleFromPath(): void
+    public function stripLocale(): self
     {
         $index = (int) config('i18n.locale_url_segment');
-        $locale = $this->i18n->getLocale($this->path[$index]);
+        $locale = $this->service->getLocale($this->path[$index]);
 
         if ($locale instanceof Locale) {
             array_splice($this->path, $index, 1);
         }
+
+        return $this;
     }
 }

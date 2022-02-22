@@ -14,16 +14,16 @@ class BrowserNegotiator implements LanguageNegotiator
      *
      * @var I18nService
      */
-    protected $i18n;
+    protected I18nService $service;
 
     /**
      * BrowserNegotiator constructor.
      *
-     * @param I18nService $i18n
+     * @param I18nService $service
      */
-    public function __construct(I18nService $i18n)
+    public function __construct(I18nService $service)
     {
-        $this->i18n = $i18n;
+        $this->service = $service;
     }
 
     /**
@@ -32,20 +32,20 @@ class BrowserNegotiator implements LanguageNegotiator
      *
      * @param \Illuminate\Http\Request $request
      *
-     * @throws \RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException
-     *
      * @return \RichanFongdasen\I18n\Locale
+     * @throws \ErrorException
      */
     public function preferredLocale(Request $request): Locale
     {
         $languages = $request->getLanguages();
 
         foreach ($languages as $language) {
-            if ($locale = $this->i18n->getLocale($language)) {
+            $locale = $this->service->getLocale($language);
+            if ($locale instanceof Locale) {
                 return $locale;
             }
         }
 
-        return $this->i18n->defaultLocale();
+        return $this->service->getDefaultLocale();
     }
 }

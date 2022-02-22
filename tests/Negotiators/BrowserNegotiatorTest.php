@@ -3,26 +3,27 @@
 namespace RichanFongdasen\I18n\Tests\Negotiators;
 
 use Illuminate\Http\Request;
+use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Negotiators\BrowserNegotiator;
 use RichanFongdasen\I18n\Tests\TestCase;
 
-class BrowserNegotiatorTests extends TestCase
+class BrowserNegotiatorTest extends TestCase
 {
     /**
      * Browser Negotiator object
      *
      * @var \RichanFongdasen\I18n\Negotiators\BrowserNegotiator
      */
-    protected $negotiator;
+    protected BrowserNegotiator $negotiator;
 
     /**
      * A mocked Request object
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
 
     /**
      * Setup the test environment
@@ -33,8 +34,10 @@ class BrowserNegotiatorTests extends TestCase
     {
         parent::setUp();
 
+
         $this->request = \Mockery::mock(Request::class);
-        $this->negotiator = new BrowserNegotiator(app(I18nService::class));
+        $service = new I18nService(app(LocaleRepository::class), $this->request);
+        $this->negotiator = new BrowserNegotiator($service);
     }
 
     /** @test */

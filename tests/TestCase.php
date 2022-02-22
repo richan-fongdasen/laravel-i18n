@@ -3,18 +3,10 @@
 namespace RichanFongdasen\I18n\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Foundation\Application;
 use Orchestra\Testbench\TestCase as BaseTest;
 
 abstract class TestCase extends BaseTest
 {
-    /**
-     * Application object
-     *
-     * @var \Illuminate\Foundation\Application
-     */
-    protected $app;
-
     /**
      * Define environment setup
      *
@@ -24,7 +16,7 @@ abstract class TestCase extends BaseTest
     protected function getEnvironmentSetUp($app)
     {
         $this->app = $app;
-        
+
         $app['config']->set('cache.default', 'array');
         $app['config']->set('database.default', 'testbench');
         $app['config']->set('database.connections.testbench', [
@@ -49,7 +41,7 @@ abstract class TestCase extends BaseTest
 
         return [
             'Cache' => \Illuminate\Support\Facades\Cache::class,
-            'I18n' => \RichanFongdasen\I18n\Facade::class,
+            'I18n' => \RichanFongdasen\I18n\Facade\I18n::class,
         ];
     }
 
@@ -62,7 +54,7 @@ abstract class TestCase extends BaseTest
     protected function getPackageProviders($app)
     {
         $this->app = $app;
-        
+
         return [
             \Illuminate\Cache\CacheServiceProvider::class,
             \Orchestra\Database\ConsoleServiceProvider::class,
@@ -73,10 +65,11 @@ abstract class TestCase extends BaseTest
     /**
      * Invoke protected / private method of the given object
      *
-     * @param  Object      $object
-     * @param  String      $methodName
-     * @param  Array|array $parameters
+     * @param Object $object
+     * @param String $methodName
+     * @param Array|array $parameters
      * @return mixed
+     * @throws \ReflectionException
      */
     protected function invokeMethod($object, $methodName, array $parameters = [])
     {
@@ -90,16 +83,17 @@ abstract class TestCase extends BaseTest
     /**
      * Get any protected / private property value
      *
-     * @param  mixed $object
-     * @param  string $propertyName
+     * @param mixed $object
+     * @param string $propertyName
      * @return mixed
+     * @throws \ReflectionException
      */
     public function getPropertyValue($object, $propertyName)
     {
         $reflection = new \ReflectionClass(get_class($object));
         $property = $reflection->getProperty($propertyName);
         $property->setAccessible(true);
- 
+
         return $property->getValue($object);
     }
 
@@ -125,8 +119,9 @@ abstract class TestCase extends BaseTest
         parent::setUp();
 
         $this->prepareDatabase(
-            realpath(__DIR__ . '/../database/migrations')
+            realpath(dirname(__DIR__) . '/database/migrations')
         );
+        $this->loadMigrationsFrom(__DIR__ . '/Supports/Migrations');
 
         Factory::guessFactoryNamesUsing(function (string $modelName) {
             return 'Database\\Factories\\' . class_basename($modelName) . 'Factory';

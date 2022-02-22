@@ -1,10 +1,11 @@
 <?php
 
-namespace RichanFongdasen\I18n;
+namespace RichanFongdasen\I18n\Facade;
 
-use Illuminate\Support\Facades\Facade as BaseFacade;
+use Illuminate\Support\Facades\Facade;
+use RichanFongdasen\I18n\I18nService;
 
-class Facade extends BaseFacade
+class I18n extends Facade
 {
     /**
      * Get the registered name of the component.

@@ -1,11 +1,13 @@
 includes:
     - vendor/nunomaduro/larastan/extension.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
     - vendor/ekino/phpstan-banned-code/extension.neon
 
 parameters:
-    level: max
+    level: 8
     checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
     paths:
         - src
     ignoreErrors:

@@ -2,250 +2,117 @@
 
 namespace RichanFongdasen\I18n;
 
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
-use RichanFongdasen\I18n\Exceptions\InvalidFallbackLanguageException;
-use RichanFongdasen\I18n\Exceptions\InvalidLocaleException;
+use Illuminate\Support\Str;
+use RichanFongdasen\I18n\Contracts\LocaleRepository;
+use RichanFongdasen\I18n\Contracts\TranslatableModel;
+use RichanFongdasen\I18n\Eloquent\TranslationModel;
 
 class I18nService
 {
     /**
-     * I18n configuration.
+     * The LocaleRepository instance.
      *
-     * @var array
+     * @var LocaleRepository
      */
-    protected $config;
+    protected LocaleRepository $repository;
 
     /**
-     * Default locale key.
+     * The I18nRouter instance.
      *
-     * @var string
+     * @var I18nRouter
      */
-    protected $defaultKey;
+    protected I18nRouter $router;
 
     /**
-     * Locale collection object.
+     * I18nService constructor.
      *
-     * @var \Illuminate\Support\Collection
+     * @param LocaleRepository $repository
+     * @param Request $request
      */
-    protected $locale;
-
-    /**
-     * All of possible locale keys.
-     *
-     * @var array
-     */
-    protected $possibleKeys = ['ietfCode', 'language'];
-
-    /**
-     * HTTP Request Object.
-     *
-     * @var \Illuminate\Http\Request
-     */
-    protected $request;
-
-    /**
-     * URL Generator object.
-     *
-     * @var \RichanFongdasen\I18n\UrlGenerator
-     */
-    protected $urlGenerator;
-
-    /**
-     * Class constructor.
-     *
-     * @param \Illuminate\Http\Request $request
-     */
-    public function __construct(Request $request)
+    public function __construct(LocaleRepository $repository, Request $request)
     {
-        $this->request = $request;
-        $this->loadConfig();
+        $this->repository = $repository;
+        $this->router = new I18nRouter($request, $this);
+    }
 
-        $this->defaultKey = $this->getConfig('language_key');
-
-        $this->locale = $this->loadLocale();
-
-        $this->urlGenerator = new UrlGenerator($this, $this->defaultKey);
+    public function createTranslation(TranslatableModel $model, Locale $locale): TranslationModel
+    {
+        return (new TranslationModel())
+            ->setTable($model->getTranslationTable())
+            ->fill([
+                $model->getForeignKey() => $model->getKey(),
+                'locale'                => $locale->getKey(),
+            ]);
     }
 
     /**
-     * Get default locale.
+     * Get all locale collection.
      *
-     * @throws InvalidFallbackLanguageException
-     *
-     * @return \RichanFongdasen\I18n\Locale
+     * @return Collection
      */
-    public function defaultLocale(): Locale
+    public function getAllLocale(): Collection
     {
-        $fallback = $this->getConfig('fallback_language');
-        $locale = $this->getLocale($fallback);
-
-        if (!$locale instanceof Locale) {
-            throw new InvalidFallbackLanguageException('Can\'t find the fallback locale object');
-        }
-
-        return $locale;
+        return $this->repository->all();
     }
 
     /**
-     * Format the IETF locale string.
+     * Get the default locale.
      *
-     * @param string $string
-     *
-     * @return string
+     * @return Locale
+     * @throws \ErrorException
      */
-    protected function formatIetf(string $string): string
+    public function getDefaultLocale(): Locale
     {
-        return str_replace('_', '-', $string);
+        return $this->repository->default();
     }
 
     /**
-     * Get configuration value for a specific key.
+     * Get locale based on the given key.
      *
      * @param string $key
-     * @param mixed  $default
-     *
-     * @return mixed
+     * @return Locale|null
      */
-    public function getConfig(string $key, $default = null)
+    public function getLocale(string $key): ?Locale
     {
-        return data_get($this->config, $key, $default);
+        $key = Str::replace('_', '-', $key);
+        return $this->repository->get($key);
     }
 
     /**
-     * Get any locale matched to the given keyword.
-     * It will return all available locales when
-     * there is no keyword.
+     * Get locale keys in array based on the given attribute name.
+     * If there was no attribute name specified, it will use
+     * the default attribute name defined in config i18n.language_key
      *
-     * @param string|null $keyword
-     *
-     * @return mixed
+     * @param string|null $attributeName
+     * @return array|null
      */
-    public function getLocale(?string $keyword = null)
+    public function getLocaleKeys(?string $attributeName = null): ?array
     {
-        if ($keyword === null) {
-            return $this->locale;
-        }
-        $keyword = $this->formatIetf($keyword);
-
-        foreach ($this->possibleKeys as $key) {
-            if ($locale = $this->locale->keyBy($key)->get($keyword)) {
-                return $locale;
-            }
-        }
-
-        return null;
+        return $this->repository->getKeys($attributeName);
     }
 
     /**
-     * Get all of available locale keys.
+     * Guess the translation table name for the given model class name.
      *
-     * @param string|null $key
-     *
-     * @return null|array
-     */
-    public function getLocaleKeys(?string $key = null): ?array
-    {
-        if (empty($key)) {
-            $key = $this->defaultKey;
-        }
-        $keys = $this->locale->keyBy($key)->keys()->all();
-
-        if ((count($keys) == 1) && empty($keys[0])) {
-            return null;
-        }
-
-        return $keys;
-    }
-
-    /**
-     * Load I18n configurations.
-     *
-     * @return void
-     */
-    public function loadConfig(): void
-    {
-        $this->config = \Config::get('i18n');
-    }
-
-    /**
-     * Load locale from repository.
-     *
-     * @return \Illuminate\Support\Collection
-     */
-    protected function loadLocale(): Collection
-    {
-        $cacheKey = 'laravel-i18n-locale-'.$this->getConfig('driver');
-        $duration = $this->getConfig('cache_duration', 86400);
-        $ttl = Carbon::now()->addSeconds($duration);
-
-        if (!$this->getConfig('enable_cache')) {
-            return app(RepositoryManager::class)->collect();
-        }
-
-        return \Cache::remember($cacheKey, $ttl, function () {
-            return app(RepositoryManager::class)->collect();
-        });
-    }
-
-    /**
-     * Get the current routed locale.
-     *
-     * @param null|\Illuminate\Http\Request $request
-     *
-     * @return \RichanFongdasen\I18n\Locale|null
-     */
-    public function routedLocale(Request $request = null): ?Locale
-    {
-        if (!$request) {
-            $request = $this->request;
-        }
-
-        $index = $this->getConfig('locale_url_segment');
-        $language = $request->segment($index);
-        if (empty($language)) {
-            return null;
-        }
-
-        if ($locale = $this->getLocale($language)) {
-            \App::setLocale($locale->{$this->defaultKey});
-        }
-
-        return $locale;
-    }
-
-    /**
-     * Get the route prefix.
-     *
+     * @param string $modelName
      * @return string
      */
-    public function routePrefix(): string
+    public function guessTranslationTable(string $modelName): string
     {
-        $locale = $this->routedLocale() ? $this->routedLocale() : $this->defaultLocale();
+        $suffix = (string) config('i18n.translation_table_suffix');
 
-        return $locale->{$this->defaultKey};
+        return Str::snake($modelName).'_'.$suffix;
     }
 
     /**
-     * Generate a localized URL for the application.
+     * Returns the I18nRouter instance.
      *
-     * @param string     $url
-     * @param mixed|null $locale
-     *
-     * @throws InvalidLocaleException|InvalidFallbackLanguageException
-     *
-     * @return string
+     * @return I18nRouter
      */
-    public function url(string $url, $locale = null): string
+    public function router(): I18nRouter
     {
-        if (is_string($locale) && !($locale = $this->getLocale($locale))) {
-            throw new InvalidLocaleException('Failed to generate URL with the given locale');
-        }
-        if (($locale === null) && !($locale = $this->routedLocale())) {
-            $locale = $this->defaultLocale();
-        }
-
-        return $this->urlGenerator->setUrl($url)->localize($locale);
+        return $this->router;
     }
 }

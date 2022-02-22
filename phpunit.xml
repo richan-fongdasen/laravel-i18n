@@ -7,7 +7,7 @@
   </coverage>
   <testsuites>
     <testsuite name="Laravel I18n Test Suite">
-      <directory suffix="Tests.php">./tests/</directory>
+      <directory suffix="Test.php">./tests/</directory>
     </testsuite>
   </testsuites>
 </phpunit>

@@ -32,6 +32,7 @@ Vagrantfile
 
 composer.phar
 composer.lock
+/coverage
 /vendor
 
 

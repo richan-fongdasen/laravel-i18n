@@ -2,9 +2,12 @@
 
 namespace RichanFongdasen\I18n;
 
-use Illuminate\Database\Eloquent\Model;
+use ErrorException;
+use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider as Provider;
+use RichanFongdasen\I18n\Contracts\LocaleRepository;
+use RichanFongdasen\I18n\Contracts\TranslatableModel;
 
 class ServiceProvider extends Provider
 {
@@ -27,15 +30,15 @@ class ServiceProvider extends Provider
     protected function publishAssets(): void
     {
         $this->publishes([
-            realpath(__DIR__.'/../config/i18n.php') => config_path('i18n.php'),
+            realpath(dirname(__DIR__).'/config/i18n.php') => config_path('i18n.php'),
         ], 'config');
 
         $this->publishes([
-            realpath(__DIR__.'/../database/migrations/') => database_path('migrations'),
+            realpath(dirname(__DIR__).'/database/migrations/') => database_path('migrations'),
         ], 'migrations');
 
         $this->publishes([
-            realpath(__DIR__.'/../storage/i18n/') => storage_path('i18n'),
+            realpath(dirname(__DIR__).'/storage/i18n/') => storage_path('i18n'),
         ], 'languages.json');
     }
 
@@ -48,8 +51,19 @@ class ServiceProvider extends Provider
     {
         $this->mergeConfigFrom(dirname(__DIR__).'/config/i18n.php', 'i18n');
 
-        $this->app->bind(I18nService::class, function () {
-            return new I18nService(request());
+        $this->app->scoped(LocaleRepository::class, static function () {
+            $allowedDriver = ['json', 'database'];
+            $driver = (string) config('i18n.driver');
+
+            if (!in_array($driver, $allowedDriver, true)) {
+                throw new ErrorException('Invalid locale repository driver defined in config i18n.driver');
+            }
+
+            return ($driver === 'json') ? new JsonRepository() : new DatabaseRepository();
+        });
+
+        $this->app->scoped(I18nService::class, function () {
+            return new I18nService(app(LocaleRepository::class), app(Request::class));
         });
     }
 
@@ -62,7 +76,7 @@ class ServiceProvider extends Provider
     {
         Collection::macro('translate', function ($locale) {
             $this->each(function ($item, $key) use ($locale) {
-                if (($item instanceof Model) && method_exists($item, 'translate')) {
+                if ($item instanceof TranslatableModel) {
                     $item->translate($locale);
                 }
 

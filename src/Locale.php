@@ -7,30 +7,38 @@ class Locale
     /**
      * Country code.
      *
+     * @readonly
+     *
      * @var string
      */
-    protected $country;
+    public string $country;
 
     /**
      * IETF Code.
      *
+     * @readonly
+     *
      * @var string
      */
-    protected $ietfCode;
+    public string $ietfCode;
 
     /**
      * Language code.
      *
+     * @readonly
+     *
      * @var string
      */
-    protected $language;
+    public string $language;
 
     /**
      * Locale name.
      *
+     * @readonly
+     *
      * @var string
      */
-    protected $name;
+    public string $name;
 
     /**
      * Class constructor.
@@ -39,38 +47,25 @@ class Locale
      * @param string $language
      * @param string $country
      */
-    public function __construct($name, $language, $country)
+    public function __construct(string $name, string $language, string $country)
     {
         $this->country = strtoupper($country);
         $this->language = strtolower($language);
-        $this->name = $name;
+        $this->name = ucfirst($name);
 
         $this->ietfCode = $this->language.'-'.$this->country;
     }
 
     /**
-     * Magic method to read data from inaccessible
-     * properties.
-     *
-     * @param string $name
+     * Get locale key based on the attribute name defined in configuration:
+     * i18n.language_key.
      *
      * @return string
      */
-    public function __get(string $name): string
+    public function getKey(): string
     {
-        return $this->{$name};
-    }
+        $keyName = config('i18n.language_key', 'language');
 
-    /**
-     * Magic method to determine if a variable is set
-     * and is not NULL.
-     *
-     * @param string $name
-     *
-     * @return bool
-     */
-    public function __isset(string $name): bool
-    {
-        return isset($this->{$name});
+        return (string) data_get($this, $keyName);
     }
 }

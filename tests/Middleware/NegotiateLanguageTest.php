@@ -4,26 +4,33 @@ namespace RichanFongdasen\I18n\Tests\Middleware;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
-use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\Middleware\NegotiateLanguage;
 use RichanFongdasen\I18n\Tests\TestCase;
 
-class NegotiateLanguageTests extends TestCase
+class NegotiateLanguageTest extends TestCase
 {
     /**
      * Negotiate Language Middleware object
      *
      * @var \RichanFongdasen\I18n\Middleware\NegotiateLanguage
      */
-    protected $middleware;
+    protected NegotiateLanguage $middleware;
 
     /**
      * A mocked Request object
      *
      * @var \Illuminate\Http\Request
      */
-    protected $request;
+    protected Request $request;
+
+    /**
+     * I18n service instance.
+     *
+     * @var I18nService
+     */
+    protected I18nService $service;
 
     /**
      * Setup the test environment
@@ -35,7 +42,25 @@ class NegotiateLanguageTests extends TestCase
         parent::setUp();
 
         $this->request = \Mockery::mock(Request::class);
-        $this->middleware = new NegotiateLanguage(app(I18nService::class));
+        $this->service = new I18nService(app(LocaleRepository::class), $this->request);
+        $this->middleware = new NegotiateLanguage($this->service);
+    }
+    
+    /** @test */
+    public function it_will_raise_exception_on_invalid_negotiator_defined_in_config()
+    {
+        $closure = function (Request $request) {
+            return 'Hurray!!';
+        };
+        config(['i18n.negotiator' => I18nService::class]);
+
+        $this->expectException(\ErrorException::class);
+        $this->request->shouldReceive('segment')
+            ->with(1)
+            ->times(1)
+            ->andReturn(null);
+
+        $this->middleware->handle($this->request, $closure);
     }
 
     /** @test */

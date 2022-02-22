@@ -2,8 +2,32 @@
 
 namespace RichanFongdasen\I18n\Contracts;
 
+use RichanFongdasen\I18n\Eloquent\TranslationModel;
+use RichanFongdasen\I18n\Locale;
+
 interface TranslatableModel
 {
+    /**
+     * Fill the model with an array of attributes.
+     *
+     * @param array $attributes
+     *
+     * @throws \Illuminate\Database\Eloquent\MassAssignmentException
+     * @throws \ErrorException
+     *
+     * @return $this
+     */
+    public function fill(array $attributes);
+
+    /**
+     * Get all translatable attribute values in array.
+     *
+     * @throws \ErrorException
+     *
+     * @return array
+     */
+    public function getAllTranslationValues(): array;
+
     /**
      * Get an attribute from the model.
      *
@@ -28,6 +52,13 @@ interface TranslatableModel
     public function getKey();
 
     /**
+     * Get all of translatable attributes.
+     *
+     * @return string[]
+     */
+    public function getTranslatableAttributes(): array;
+
+    /**
      * Get translation table.
      *
      * @return string
@@ -42,4 +73,38 @@ interface TranslatableModel
      * @return bool
      */
     public function isDirty($attributes = null);
+
+    /**
+     * Set a given attribute on the model.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @throws \ErrorException
+     *
+     * @return mixed
+     */
+    public function setAttribute($key, $value);
+
+    /**
+     * Translate current model.
+     *
+     * @param Locale|string $locale
+     *
+     * @throws \ErrorException
+     *
+     * @return $this
+     */
+    public function translate($locale): self;
+
+    /**
+     * Resolve and get the translation model for current locale.
+     *
+     * @param Locale|null $locale
+     *
+     * @throws \ErrorException
+     *
+     * @return TranslationModel
+     */
+    public function translation(?Locale $locale = null): TranslationModel;
 }

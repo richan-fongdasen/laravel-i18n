@@ -2,41 +2,36 @@ name: Build
 
 on:
   push:
-    branches:
-      - master
-      - release/*
-      - issue-*
+    paths-ignore: ['*.md']
   pull_request:
-    branches:
-      - master
-  schedule:
-    - cron: 0 7 * * 1
+    paths-ignore: ['*.md']
+    branches: [ master ]
 
 jobs:
   analysis:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [7.4]
+        php: [8.0]
     steps:
       - uses: actions/checkout@v1
-      - name: Cache composer dependencies
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-i18n-laravel-latest
-        with:
-          path: ~/.composer
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: laravel-i18n-analysis
+        with:
+          path: ~/.composer
+          key: php-${{ matrix.php }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php }}-build-${{ env.cache-name }}-
+            php-${{ matrix.php }}-build-
+            php-${{ matrix.php }}-
       - name: Install composer dependencies
         run: composer install --prefer-dist
       - name: Run phpstan analysis
@@ -50,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [8.0]
+        php: [7.4, 8.0, 8.1]
     steps:
       - uses: actions/checkout@v1
       - name: Setup PHP
@@ -59,37 +54,87 @@ jobs:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: laravel-i18n-laravel8
+        with:
+          path: ~/.composer
+          key: php-${{ matrix.php }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php }}-build-${{ env.cache-name }}-
+            php-${{ matrix.php }}-build-
+            php-${{ matrix.php }}-
+      - name: Force update laravel version
+        run: composer require "laravel/framework:^8.0" "orchestra/testbench:^6.0" --no-update
       - name: Remove some dev dependencies
         run: composer remove "ekino/phpstan-banned-code" "nunomaduro/larastan" "phpmd/phpmd" "phpstan/phpstan-deprecation-rules" "sebastian/phpcpd" --dev --no-update
       - name: Install composer dependencies
         run: composer install --prefer-dist
       - name: Run the test suite
         run: phpdbg -qrr -dmemory_limit=3G vendor/bin/phpunit
-  laravel8-cov:
+  laravel9:
     needs: [ analysis ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ 7.4 ]
+        php: [ 8.1 ]
     steps:
       - uses: actions/checkout@v1
-      - name: Cache composer dependencies
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-i18n-laravel-latest
-        with:
-          path: ~/.composer
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}-
-            ${{ runner.os }}-build-
-            ${{ runner.os }}-
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
           coverage: none
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: laravel-i18n-laravel9
+        with:
+          path: ~/.composer
+          key: php-${{ matrix.php }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php }}-build-${{ env.cache-name }}-
+            php-${{ matrix.php }}-build-
+            php-${{ matrix.php }}-
+      - name: Force update laravel version
+        run: composer require "laravel/framework:^9.0" "orchestra/testbench:^7.0" --no-update
+      - name: Remove some dev dependencies
+        run: composer remove "ekino/phpstan-banned-code" "nunomaduro/larastan" "phpmd/phpmd" "phpstan/phpstan-deprecation-rules" "sebastian/phpcpd" --dev --no-update
+      - name: Install composer dependencies
+        run: composer install --prefer-dist
+      - name: Run the test suite
+        run: phpdbg -qrr -dmemory_limit=3G vendor/bin/phpunit
+  laravel9-cov:
+    needs: [ analysis ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ 8.0 ]
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv
+          coverage: none
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        env:
+          cache-name: laravel-i18n-laravel9
+        with:
+          path: ~/.composer
+          key: php-${{ matrix.php }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            php-${{ matrix.php }}-build-${{ env.cache-name }}-
+            php-${{ matrix.php }}-build-
+            php-${{ matrix.php }}-
+      - name: Force update laravel version
+        run: composer require "laravel/framework:^9.0" "orchestra/testbench:^7.0" --no-update
+      - name: Remove some dev dependencies
+        run: composer remove "ekino/phpstan-banned-code" "nunomaduro/larastan" "phpmd/phpmd" "phpstan/phpstan-deprecation-rules" "sebastian/phpcpd" --dev --no-update
       - name: Install composer dependencies
         run: composer install --prefer-dist
       - name: Run the Coverage test suite

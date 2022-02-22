@@ -26,6 +26,7 @@ return [
     */
 
     'language_datasource' => storage_path('i18n/languages.json'),
+//    'language_datasource' => 'languages',
 
     /*
     |--------------------------------------------------------------------------
@@ -36,7 +37,7 @@ return [
     |
     */
 
-    'cache_duration' => 86400,
+    'cache_duration' => 60 * 60 * 24,
 
     /*
     |--------------------------------------------------------------------------
@@ -44,13 +45,26 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define which language key in datasource that we should use.
-    | Available options:
+    | Available options are:
     |   - language, ie: en, es, de, etc.
     |   - ietfCode, ie: en-US, en-UK, de-DE, etc.
     |
     */
 
     'language_key' => 'language',
+
+    /*
+    |--------------------------------------------------------------------------
+    | API query key
+    |--------------------------------------------------------------------------
+    |
+    | Define the query parameter name which will be used as language selector
+    | in every API request.
+    | e.g: http://localhost:8000/api/articles?lang=en
+    |
+    */
+
+    'api_query_key' => 'lang',
 
     /*
     |--------------------------------------------------------------------------
@@ -71,22 +85,11 @@ return [
     |
     | Define which url segment number that will be used to put the current
     | locale information. URL segment is started with '1'.
+    | e.g: http://my-application.app/en/home
     |
     */
    
     'locale_url_segment' => 1,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Fallback language
-    |--------------------------------------------------------------------------
-    |
-    | Define your preferred fallback language, which will be used when
-    | Language Negotiator failed to recommend any supported language.
-    |
-    */
-
-    'fallback_language' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -97,6 +100,7 @@ return [
     | translation table name.
     |
     */
+
     'translation_table_suffix' => 'translations',
 
     /*
@@ -107,5 +111,7 @@ return [
     | Toggle store locale to the cache
     |
     */
+
     'enable_cache' => env('I18N_ENABLE_CACHE', true),
+
 ];

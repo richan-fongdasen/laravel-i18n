@@ -30,41 +30,6 @@ Install the package via Composer :
 $ composer require richan-fongdasen/laravel-i18n
 ```
 
-### Laravel version compatibility
-
- Laravel version   | I18n version
-:------------------|:-----------------
- 5.1.x             | 1.0.x
- 5.2.x - 5.4.x     | 1.1.x
- 5.5.x - 5.8.x     | 1.2.x
- 6.x               | 1.3.x
- 7.x               | 1.4.x
- 8.x               | 1.5.x and higher
-
-> If you are using Laravel version 5.5+ then you can skip registering the service provider in your Laravel application.
-
-### Service Provider
-
-Add the package service provider in your ``config/app.php``
-
-```php
-'providers' => [
-    // ...
-    RichanFongdasen\I18n\ServiceProvider::class,
-];
-```
-
-### Alias
-
-Add the package's alias in your ``config/app.php``
-
-```php
-'aliases' => [
-    // ...
-    'I18n' => RichanFongdasen\I18n\Facade::class,
-];
-```
-
 ## Publish package assets
 
 Publish the package asset files using this ``php artisan`` command
@@ -107,17 +72,18 @@ return [
     */
 
     'language_datasource' => storage_path('i18n/languages.json'),
+//    'language_datasource' => 'languages',
 
     /*
     |--------------------------------------------------------------------------
     | Cache duration
     |--------------------------------------------------------------------------
     |
-    | Define how long we should cache the language dataset.
+    | Define how long we should cache the language dataset in seconds.
     |
     */
 
-    'cache_duration' => 1440,
+    'cache_duration' => 60 * 60 * 24,
 
     /*
     |--------------------------------------------------------------------------
@@ -125,13 +91,26 @@ return [
     |--------------------------------------------------------------------------
     |
     | Define which language key in datasource that we should use.
-    | Available options:
+    | Available options are:
     |   - language, ie: en, es, de, etc.
     |   - ietfCode, ie: en-US, en-UK, de-DE, etc.
     |
     */
 
     'language_key' => 'language',
+
+    /*
+    |--------------------------------------------------------------------------
+    | API query key
+    |--------------------------------------------------------------------------
+    |
+    | Define the query parameter name which will be used as language selector
+    | in every API request.
+    | e.g: http://localhost:8000/api/articles?lang=en
+    |
+    */
+
+    'api_query_key' => 'lang',
 
     /*
     |--------------------------------------------------------------------------
@@ -152,22 +131,11 @@ return [
     |
     | Define which url segment number that will be used to put the current
     | locale information. URL segment is started with '1'.
+    | e.g: http://my-application.app/en/home
     |
     */
    
     'locale_url_segment' => 1,
-
-    /*
-    |--------------------------------------------------------------------------
-    | Fallback language
-    |--------------------------------------------------------------------------
-    |
-    | Define your preferred fallback language, which will be used when
-    | Language Negotiator failed to recommend any supported language.
-    |
-    */
-
-    'fallback_language' => 'en',
 
     /*
     |--------------------------------------------------------------------------
@@ -178,7 +146,20 @@ return [
     | translation table name.
     |
     */
-    'translation_table_suffix' => 'translations'
+
+    'translation_table_suffix' => 'translations',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Enable Store to the cache
+    |--------------------------------------------------------------------------
+    |
+    | Toggle store locale to the cache
+    |
+    */
+
+    'enable_cache' => env('I18N_ENABLE_CACHE', true),
+
 ];
 ```
 

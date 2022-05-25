@@ -4,12 +4,12 @@ namespace RichanFongdasen\I18n\Eloquent\Concerns;
 
 use ErrorException;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\App;
 use RichanFongdasen\I18n\Contracts\TranslatableModel;
 use RichanFongdasen\I18n\Eloquent\I18nObserver;
-use RichanFongdasen\I18n\Eloquent\TranslationModel;
 use RichanFongdasen\I18n\Eloquent\TranslationScope;
 use RichanFongdasen\I18n\Facade\I18n;
 use RichanFongdasen\I18n\Locale;
@@ -246,11 +246,11 @@ trait Translatable
      *
      * @param Locale|null $locale
      *
-     * @throws ErrorException
+     * @return Model
      *
-     * @return TranslationModel
+     * @throws ErrorException
      */
-    public function translation(?Locale $locale = null): TranslationModel
+    public function translation(?Locale $locale = null): Model
     {
         if ($locale === null) {
             $locale = $this->currentLocale;
@@ -260,7 +260,7 @@ trait Translatable
             ->where('locale', $locale->getKey())
             ->first();
 
-        if (!($translation instanceof TranslationModel)) {
+        if (!($translation instanceof Model)) {
             $translation = I18n::createTranslation($this, $locale);
             $this->translations->push($translation);
         }
@@ -273,10 +273,18 @@ trait Translatable
      * with its translation model.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @throws ErrorException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     public function translations(): HasMany
     {
-        $model = new TranslationModel();
+        $model = app()->make(config('i18n.translation_model'));
+
+        if (!($model instanceof Model)) {
+            throw new ErrorException('Invalid translation model, the defined model is not an instance of Eloquent Model.');
+        }
+
         $model->setTable($this->getTranslationTable());
 
         return new HasMany(

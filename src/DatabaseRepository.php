@@ -2,7 +2,7 @@
 
 namespace RichanFongdasen\I18n;
 
-use Illuminate\Support\Facades\DB;
+use RichanFongdasen\I18n\Eloquent\Models\Language;
 use Traversable;
 
 class DatabaseRepository extends AbstractRepository
@@ -14,8 +14,7 @@ class DatabaseRepository extends AbstractRepository
      */
     public function readDataSource(): Traversable
     {
-        return DB::table((string) config('i18n.language_datasource'))
-            ->orderBy('order')
+        return Language::orderBy('order')
             ->get();
     }
 }

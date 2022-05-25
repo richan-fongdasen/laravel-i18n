@@ -2,7 +2,7 @@
 
 namespace RichanFongdasen\I18n\Contracts;
 
-use RichanFongdasen\I18n\Eloquent\TranslationModel;
+use Illuminate\Database\Eloquent\Model;
 use RichanFongdasen\I18n\Locale;
 
 interface TranslatableModel
@@ -102,9 +102,9 @@ interface TranslatableModel
      *
      * @param Locale|null $locale
      *
-     * @throws \ErrorException
+     * @return Model
+     *@throws \ErrorException
      *
-     * @return TranslationModel
      */
-    public function translation(?Locale $locale = null): TranslationModel;
+    public function translation(?Locale $locale = null): Model;
 }

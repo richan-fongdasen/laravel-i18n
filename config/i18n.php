@@ -30,6 +30,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Language model
+    |--------------------------------------------------------------------------
+    |
+    | Define the model class name to manage the language resources.
+    |
+    */
+
+    'language_model' => \RichanFongdasen\I18n\Eloquent\Models\Language::class,
+
+    /*
+    |--------------------------------------------------------------------------
     | Cache duration
     |--------------------------------------------------------------------------
     |
@@ -102,6 +113,17 @@ return [
     */
 
     'translation_table_suffix' => 'translations',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Translation model class name
+    |--------------------------------------------------------------------------
+    |
+    | Define the model class name to store the translation values.
+    |
+    */
+
+    'translation_model' => \RichanFongdasen\I18n\Eloquent\Models\Translation::class,
 
     /*
     |--------------------------------------------------------------------------

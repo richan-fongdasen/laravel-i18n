@@ -1,10 +1,10 @@
 <?php
 
-namespace RichanFongdasen\I18n\Eloquent;
+namespace RichanFongdasen\I18n\Eloquent\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class TranslationModel extends Model
+class Translation extends Model
 {
     /**
      * Enable mass assignment for this

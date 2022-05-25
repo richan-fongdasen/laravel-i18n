@@ -2,12 +2,13 @@
 
 namespace RichanFongdasen\I18n;
 
+use ErrorException;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\Contracts\TranslatableModel;
-use RichanFongdasen\I18n\Eloquent\TranslationModel;
 
 class I18nService
 {
@@ -37,9 +38,25 @@ class I18nService
         $this->router = new I18nRouter($request, $this);
     }
 
-    public function createTranslation(TranslatableModel $model, Locale $locale): TranslationModel
+    /**
+     * Create a new translation model based on the given parameters.
+     *
+     * @param TranslatableModel $model
+     * @param Locale $locale
+     * @return Model
+     *
+     * @throws ErrorException
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    public function createTranslation(TranslatableModel $model, Locale $locale): Model
     {
-        return (new TranslationModel())
+        $translation = app()->make(config('i18n.translation_model'));
+
+        if (!($translation instanceof Model)) {
+            throw new ErrorException('Invalid translation model, the defined model is not an instance of Eloquent Model.');
+        }
+
+        return $translation
             ->setTable($model->getTranslationTable())
             ->fill([
                 $model->getForeignKey() => $model->getKey(),

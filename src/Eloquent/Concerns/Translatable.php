@@ -246,9 +246,9 @@ trait Translatable
      *
      * @param Locale|null $locale
      *
-     * @return Model
-     *
      * @throws ErrorException
+     *
+     * @return Model
      */
     public function translation(?Locale $locale = null): Model
     {
@@ -272,10 +272,10 @@ trait Translatable
      * Define HasMany model relationship
      * with its translation model.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     *
      * @throws ErrorException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function translations(): HasMany
     {

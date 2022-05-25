@@ -29,8 +29,9 @@ class I18nObserver
      *
      * @param \RichanFongdasen\I18n\Contracts\TranslatableModel $model
      *
-     * @return void
      * @throws ErrorException
+     *
+     * @return void
      */
     public function saved(TranslatableModel $model): void
     {

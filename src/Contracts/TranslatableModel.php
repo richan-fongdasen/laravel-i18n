@@ -102,9 +102,9 @@ interface TranslatableModel
      *
      * @param Locale|null $locale
      *
-     * @return Model
      *@throws \ErrorException
      *
+     * @return Model
      */
     public function translation(?Locale $locale = null): Model;
 }

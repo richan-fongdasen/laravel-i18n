@@ -42,11 +42,12 @@ class I18nService
      * Create a new translation model based on the given parameters.
      *
      * @param TranslatableModel $model
-     * @param Locale $locale
-     * @return Model
+     * @param Locale            $locale
      *
      * @throws ErrorException
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return Model
      */
     public function createTranslation(TranslatableModel $model, Locale $locale): Model
     {

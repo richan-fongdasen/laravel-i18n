@@ -28,17 +28,17 @@
     },
     "require": {
         "php": "^7.4|^8.0",
-        "illuminate/database": "^8.0|^9.0",
-        "illuminate/support": "^8.0|^9.0",
+        "illuminate/database": "^8.0|^9.0|^10.0",
+        "illuminate/support": "^8.0|^9.0|^10.0",
         "nesbot/carbon": "^2.16"
     },
     "require-dev": {
         "ekino/phpstan-banned-code": "^1.0",
-        "fakerphp/faker": "^1.19",
-        "mockery/mockery": "^1.5",
+        "fakerphp/faker": "^1.19|^1.9.1",
+        "mockery/mockery": "^1.5|^1.4.4",
         "nunomaduro/larastan": "^1.0|^2.0",
         "orchestra/database": "^6.0|dev-master",
-        "orchestra/testbench": "^6.0|^7.0",
+        "orchestra/testbench": "^6.0|^7.0|^8.0",
         "phpmd/phpmd": "^2.11",
         "phpstan/phpstan-deprecation-rules": "^1.0",
         "phpstan/phpstan-strict-rules": "^1.0",

@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [8.0]
+        php: [8.0, 8.1]
     steps:
       - uses: actions/checkout@v1
       - name: Setup PHP
@@ -111,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php: [ 8.0 ]
+        php: [ 8.0 , 8.1]
     steps:
       - uses: actions/checkout@v1
       - name: Setup PHP

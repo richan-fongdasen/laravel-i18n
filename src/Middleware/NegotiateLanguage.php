@@ -42,12 +42,10 @@ class NegotiateLanguage
         if ($this->service->router()->locale() === null) {
             $negotiator = app((string) config('i18n.negotiator'));
 
-            /** @phpstan-ignore-next-line */
             if (!($negotiator instanceof LanguageNegotiator)) {
                 throw new ErrorException('Invalid language negotiator defined in config i18n.negotiator');
             }
 
-            /** @phpstan-ignore-next-line */
             $locale = $negotiator->preferredLocale($request);
 
             return redirect($this->service->router()->url($request->fullUrl(), $locale));

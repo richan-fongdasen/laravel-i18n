@@ -70,8 +70,7 @@ jobs:
       - name: Install composer dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run PHPUnit tests and generate code coverage
-        run: |
-          vendor/bin/phpunit
+        run: vendor/bin/phpunit
   test-coverage:
     name: Test (PHP ${{ matrix.php }})
     needs: [ analysis ]
@@ -101,7 +100,6 @@ jobs:
       - name: Install composer dependencies
         run: composer install --no-interaction --prefer-dist
       - name: Run PHPUnit tests and generate code coverage
-        run: |
-          vendor/bin/phpunit --coverage-clover=clover.xml
+        run: vendor/bin/phpunit --coverage-clover=clover.xml
       - name: Upload code coverage results
         run: bash <(curl -s https://codecov.io/bash)

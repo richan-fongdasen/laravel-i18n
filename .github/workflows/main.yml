@@ -65,30 +65,30 @@ jobs:
         run: |
           composer analyse
           vendor/bin/phpunit
-    test-coverage:
-      name: Test (PHP ${{ matrix.php }})
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          php: [ 8.2 ]
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v2
-        - name: Set up PHP
-          uses: shivammathur/setup-php@v2
-          with:
-            php-version: ${{ matrix.php }}
-        - name: Cache Composer dependencies
-          uses: actions/cache@v1
-          with:
-            path: ~/.composer/cache/files
-            key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: php-${{ matrix.php }}-composer-
-        - name: Install composer dependencies
-          run: composer install --no-interaction --prefer-source
-        - name: Run PHPUnit tests and generate code coverage
-          run: |
-            composer analyse
-            vendor/bin/phpunit --coverage-clover=clover.xml
-        - name: Upload code coverage results
-          run: bash <(curl -s https://codecov.io/bash)
+  test-coverage:
+    name: Test (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [ 8.2 ]
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+      - name: Cache Composer dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: php-${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: php-${{ matrix.php }}-composer-
+      - name: Install composer dependencies
+        run: composer install --no-interaction --prefer-source
+      - name: Run PHPUnit tests and generate code coverage
+        run: |
+          composer analyse
+          vendor/bin/phpunit --coverage-clover=clover.xml
+      - name: Upload code coverage results
+        run: bash <(curl -s https://codecov.io/bash)

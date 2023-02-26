@@ -11,8 +11,9 @@ class JsonRepository extends AbstractRepository
     /**
      * Get all registered locale from the datasource.
      *
-     * @return Traversable
      * @throws ErrorException
+     *
+     * @return Traversable
      */
     public function readDataSource(): Traversable
     {

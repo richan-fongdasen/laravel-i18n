@@ -2,11 +2,12 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Locale;
 
 class LocaleTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function all_the_class_properties_are_accessible_read_only()
     {
         $locale = new Locale('english', 'EN', 'us');
@@ -17,7 +18,7 @@ class LocaleTest extends TestCase
         self::assertEquals('en-US', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_locale_key_value()
     {
         config(['i18n.language_key' => 'ietfCode']);

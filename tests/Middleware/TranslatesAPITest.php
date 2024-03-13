@@ -4,6 +4,7 @@ namespace RichanFongdasen\I18n\Tests\Middleware;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Middleware\TranslatesAPI;
@@ -37,7 +38,7 @@ class TranslatesAPITest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +50,7 @@ class TranslatesAPITest extends TestCase
         $this->middleware = new TranslatesAPI($this->service);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_favor_default_app_language_when_there_was_no_language_parameter_in_api_query()
     {
         $closure = function (Request $request) {
@@ -62,7 +63,7 @@ class TranslatesAPITest extends TestCase
         self::assertEquals('en', App::getLocale());
     }
 
-    /** @test */
+    #[Test]
     public function it_will_favor_default_app_language_on_invalid_language_query_parameter()
     {
         $closure = function (Request $request) {
@@ -75,7 +76,7 @@ class TranslatesAPITest extends TestCase
         self::assertEquals('en', App::getLocale());
     }
 
-    /** @test */
+    #[Test]
     public function it_will_switch_the_app_language_based_on_the_requested_language_query_parameter()
     {
         $closure = function (Request $request) {

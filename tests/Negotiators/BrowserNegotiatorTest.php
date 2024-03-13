@@ -3,6 +3,7 @@
 namespace RichanFongdasen\I18n\Tests\Negotiators;
 
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
@@ -30,7 +31,7 @@ class BrowserNegotiatorTest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -40,7 +41,7 @@ class BrowserNegotiatorTest extends TestCase
         $this->negotiator = new BrowserNegotiator($service);
     }
 
-    /** @test */
+    #[Test]
     public function it_return_english_locale_based_on_browsers_primary_language_code()
     {
         $this->request->shouldReceive('getLanguages')
@@ -53,7 +54,7 @@ class BrowserNegotiatorTest extends TestCase
         $this->assertEquals('en-US', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_return_english_locale_based_on_browsers_primary_ietf_code()
     {
         $this->request->shouldReceive('getLanguages')
@@ -66,7 +67,7 @@ class BrowserNegotiatorTest extends TestCase
         $this->assertEquals('en-US', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_return_spanish_locale_based_on_browsers_secondary_language_code()
     {
         $this->request->shouldReceive('getLanguages')
@@ -79,7 +80,7 @@ class BrowserNegotiatorTest extends TestCase
         $this->assertEquals('es-ES', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_return_spanish_locale_based_on_browsers_secondary_ietf_code()
     {
         $this->request->shouldReceive('getLanguages')
@@ -92,7 +93,7 @@ class BrowserNegotiatorTest extends TestCase
         $this->assertEquals('es-ES', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_return_english_locale_as_fallback_locale()
     {
         $this->request->shouldReceive('getLanguages')

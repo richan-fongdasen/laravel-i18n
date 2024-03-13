@@ -2,13 +2,14 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\JsonRepository;
 use RichanFongdasen\I18n\Locale;
 
 class JsonRepositoryTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_resolve_the_abstract_interface_as_json_repository()
     {
         $repository = app(LocaleRepository::class);
@@ -16,7 +17,7 @@ class JsonRepositoryTest extends TestCase
         self::assertInstanceOf(JsonRepository::class, $repository);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_all_the_locale_from_the_datasource()
     {
         $collection = (new JsonRepository)->all();
@@ -43,7 +44,7 @@ class JsonRepositoryTest extends TestCase
         self::assertEquals('de-DE', $germany->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_empty_collection_on_empty_datasource()
     {
         $this->expectException(\ErrorException::class);

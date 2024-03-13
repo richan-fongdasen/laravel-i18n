@@ -4,6 +4,7 @@ namespace RichanFongdasen\I18n\Tests;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
@@ -45,7 +46,7 @@ class I18nServiceTest extends TestCase
         $this->service = new I18nService($this->repository, $this->request);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_all_locale_collection()
     {
         $this->repository->shouldReceive('all')->andReturn(new Collection([1, 2, 3]));
@@ -55,7 +56,7 @@ class I18nServiceTest extends TestCase
         self::assertEquals(3, $actual->count());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_the_default_locale()
     {
         $expected = new Locale('English', 'en', 'US');
@@ -66,7 +67,7 @@ class I18nServiceTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_the_locale_based_on_the_given_language_key()
     {
         $expected = new Locale('English', 'en', 'US');
@@ -77,7 +78,7 @@ class I18nServiceTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_the_locale_keys_based_on_the_given_attribute_name()
     {
         $expected = ['en', 'es', 'de'];
@@ -88,7 +89,7 @@ class I18nServiceTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_guess_the_translation_table_name_for_a_model()
     {
         self::assertEquals('news_translations', $this->service->guessTranslationTable('News'));

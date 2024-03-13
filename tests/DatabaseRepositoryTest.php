@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Support\Facades\DB;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\DatabaseRepository;
@@ -54,7 +55,7 @@ class DatabaseRepositoryTest extends TestCase
         $this->repository = new DatabaseRepository;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_resolve_the_abstract_interface_as_json_repository()
     {
         $repository = app(LocaleRepository::class);
@@ -62,7 +63,7 @@ class DatabaseRepositoryTest extends TestCase
         self::assertInstanceOf(DatabaseRepository::class, $repository);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_load_all_the_locale_from_the_datasource()
     {
         $collection = $this->repository->all();

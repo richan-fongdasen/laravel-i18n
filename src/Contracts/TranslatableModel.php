@@ -102,7 +102,7 @@ interface TranslatableModel
      *
      * @param Locale|null $locale
      *
-     *@throws \ErrorException
+     * @throws \ErrorException
      *
      * @return Model
      */

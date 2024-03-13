@@ -4,6 +4,7 @@ namespace RichanFongdasen\I18n\Tests\Middleware;
 
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Middleware\NegotiateLanguage;
@@ -37,7 +38,7 @@ class NegotiateLanguageTest extends TestCase
      *
      * @return void
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -45,8 +46,8 @@ class NegotiateLanguageTest extends TestCase
         $this->service = new I18nService(app(LocaleRepository::class), $this->request);
         $this->middleware = new NegotiateLanguage($this->service);
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_will_raise_exception_on_invalid_negotiator_defined_in_config()
     {
         $closure = function (Request $request) {
@@ -63,7 +64,7 @@ class NegotiateLanguageTest extends TestCase
         $this->middleware->handle($this->request, $closure);
     }
 
-    /** @test */
+    #[Test]
     public function it_will_pass_the_request_if_the_request_has_locale_prefix_in_its_url()
     {
         $closure = function (Request $request) {
@@ -80,7 +81,7 @@ class NegotiateLanguageTest extends TestCase
         $this->assertEquals('Hurray!!', $actual);
     }
 
-    /** @test */
+    #[Test]
     public function redirect_to_english_localized_url_if_the_request_has_no_locale_prefix_in_its_url()
     {
         $closure = function (Request $request) {
@@ -107,7 +108,7 @@ class NegotiateLanguageTest extends TestCase
         $this->assertEquals($expected, $response->getTargetUrl());
     }
 
-    /** @test */
+    #[Test]
     public function redirect_to_spanish_localized_url_if_the_request_has_no_locale_prefix_in_its_url()
     {
         $closure = function (Request $request) {

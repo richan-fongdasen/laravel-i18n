@@ -3,6 +3,7 @@
 namespace RichanFongdasen\I18n\Tests\Features;
 
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Facade\I18n;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 use RichanFongdasen\I18n\Tests\TestCase;
@@ -11,7 +12,7 @@ class SavingTranslatableAttributesTest extends TestCase
 {
     use DatabaseMigrations;
 
-    /** @test */
+    #[Test]
     public function it_can_save_the_translation_by_specifying_translatable_attribute_values_one_by_one()
     {
         $product = Product::create([
@@ -42,7 +43,7 @@ class SavingTranslatableAttributesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_and_saved_with_complete_translation_attributes()
     {
         $product = new Product();
@@ -71,7 +72,7 @@ class SavingTranslatableAttributesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_with_incomplete_translation_attributes()
     {
         $product = new Product();
@@ -104,7 +105,7 @@ class SavingTranslatableAttributesTest extends TestCase
         self::assertEquals('English description', $product->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_with_only_default_translation_attributes()
     {
         $product = new Product();
@@ -128,7 +129,7 @@ class SavingTranslatableAttributesTest extends TestCase
         self::assertEquals(null, $product->translation(I18n::getLocale('de'))->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_all_translation_records_with_mass_assignment()
     {
         $original = Product::create([
@@ -167,7 +168,7 @@ class SavingTranslatableAttributesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_update_all_translation_records_with_single_assignment()
     {
         $original = new Product();
@@ -205,7 +206,7 @@ class SavingTranslatableAttributesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_and_saved_with_alternative_data_structure()
     {
         $product = new Product();
@@ -236,7 +237,7 @@ class SavingTranslatableAttributesTest extends TestCase
         }
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_and_updated_with_alternative_data_structure()
     {
         $original = Product::create([

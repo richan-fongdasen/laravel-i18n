@@ -2,13 +2,14 @@
 
 namespace RichanFongdasen\I18n\Tests\Eloquent\Concerns;
 
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Facade\I18n;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
 use RichanFongdasen\I18n\Tests\TestCase;
 
 class TranslatableTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function it_can_create_new_translation_model_based_on_the_given_locale()
     {
         $product = new Product();
@@ -20,7 +21,7 @@ class TranslatableTest extends TestCase
         $this->assertEquals('es', $translation->locale);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_with_complete_translation_attributes()
     {
         $product = new Product();
@@ -56,7 +57,7 @@ class TranslatableTest extends TestCase
         $product->translateTo('id');
     }
 
-    /** @test */
+    #[Test]
     public function it_can_be_filled_with_incomplete_translation_attributes()
     {
         $product = new Product();
@@ -83,7 +84,7 @@ class TranslatableTest extends TestCase
         $this->assertEquals('English description', $product->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_generate_join_attributes_correctly()
     {
         $product = new Product();
@@ -98,7 +99,7 @@ class TranslatableTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_all_of_the_translatable_attributes()
     {
         $product = new Product();

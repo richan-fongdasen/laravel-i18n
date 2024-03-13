@@ -6,6 +6,7 @@ use Illuminate\Database\Query\JoinClause;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Facade\I18n;
 use RichanFongdasen\I18n\Tests\Supports\Concerns\SeedsRequiredDatabase;
 use RichanFongdasen\I18n\Tests\Supports\Models\Product;
@@ -28,7 +29,7 @@ class GettingTranslatableAttributesTest extends TestCase
         $this->seedDatabase();
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_translation_attribute_correctly()
     {
         App::setLocale('es');
@@ -44,7 +45,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected->description, $product->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_translation_value_correctly()
     {
         App::setLocale('de');
@@ -60,7 +61,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected->description, $product->translation()->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_fallback_value_when_the_translated_value_is_not_available()
     {
         App::setLocale('es');
@@ -79,7 +80,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected->description, $product->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_join_the_translation_table()
     {
         $join = data_get(Product::joinTranslation()->getQuery()->joins, '0');
@@ -96,7 +97,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected, Product::joinTranslation()->getQuery()->columns);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_translate_the_model_based_on_the_given_locale_key()
     {
         $product = Product::find(9)->translateTo('de');
@@ -110,7 +111,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected->description, $product->description);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_all_translatable_attribute_values()
     {
         $product = Product::create([
@@ -141,7 +142,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected, $product->getAllTranslationValues());
     }
 
-    /** @test */
+    #[Test]
     public function it_will_merge_the_translation_attributes_on_array_serialization()
     {
         $product = Product::find(8)
@@ -165,7 +166,7 @@ class GettingTranslatableAttributesTest extends TestCase
         self::assertEquals($expected, $product->toArray());
     }
 
-    /** @test */
+    #[Test]
     public function eloquent_collections_are_translatable()
     {
         $products = Product::where('product_category_id', 1)->get();

@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use RichanFongdasen\I18n\I18nRouter;
@@ -44,7 +45,7 @@ class I18nRouterTest extends TestCase
      * @return void
      * @throws \ErrorException
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -56,7 +57,7 @@ class I18nRouterTest extends TestCase
         $this->locale = $this->service->getDefaultLocale();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_identify_and_returns_the_respective_locale_instance()
     {
         $this->request->shouldReceive('segment')->withArgs([1])->andReturn('es');
@@ -68,7 +69,7 @@ class I18nRouterTest extends TestCase
         self::assertEquals('es', App::getLocale());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_on_empty_locale_key_segment()
     {
         $this->request->shouldReceive('segment')->withArgs([1])->andReturn('');
@@ -79,7 +80,7 @@ class I18nRouterTest extends TestCase
         self::assertEquals('en', App::getLocale());
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_on_unidentified_locale_key_segment()
     {
         $this->request->shouldReceive('segment')->withArgs([1])->andReturn('unknown');
@@ -90,7 +91,7 @@ class I18nRouterTest extends TestCase
         self::assertEquals('en', App::getLocale());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_returns_the_url_prefix_correctly()
     {
         $this->request->shouldReceive('segment')->withArgs([1])->andReturn('de');
@@ -98,7 +99,7 @@ class I18nRouterTest extends TestCase
         self::assertEquals('de', $this->router->getPrefix());
     }
 
-    /** @test */
+    #[Test]
     public function it_raises_exception_on_generating_url_with_an_invalid_locale()
     {
         $this->expectException(\ErrorException::class);
@@ -106,7 +107,7 @@ class I18nRouterTest extends TestCase
         $this->router->url('/about-us/company-overview', 'ar');
     }
 
-    /** @test */
+    #[Test]
     public function it_generate_correct_url_based_on_the_given_locale()
     {
         $expected = '/de/about-us/company-overview';
@@ -115,7 +116,7 @@ class I18nRouterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_generate_correct_url_based_on_the_routed_locale()
     {
         $this->request->shouldReceive('segment')
@@ -129,7 +130,7 @@ class I18nRouterTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_generate_correct_url_based_on_the_default_locale()
     {
         $this->request->shouldReceive('segment')

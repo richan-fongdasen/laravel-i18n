@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\I18nService;
 use RichanFongdasen\I18n\Locale;
 use RichanFongdasen\I18n\UrlGenerator;
@@ -35,7 +36,7 @@ class UrlGeneratorTest extends TestCase
      * @return void
      * @throws \ErrorException
      */
-    public function setUp() :void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -44,7 +45,7 @@ class UrlGeneratorTest extends TestCase
         $this->locale = $this->service->getDefaultLocale();
     }
 
-    /** @test */
+    #[Test]
     public function it_can_parse_complex_url()
     {
         $this->urlGenerator->set('https://usr:psw@test.de:81/my/file.php?a=b&b[]=2&b[]=3#myFragment');
@@ -59,7 +60,7 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_parse_schemaless_url()
     {
         $this->urlGenerator->set('//:pass@test.de:82/my/file.php#myFragment');
@@ -74,7 +75,7 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_parse_hostless_url()
     {
         $this->urlGenerator->set('/my/file.php?a=b&b[]=2&b[]=3#myFragment');
@@ -89,7 +90,7 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals('#myFragment', $this->getPropertyValue($this->urlGenerator, 'fragment'));
     }
 
-    /** @test */
+    #[Test]
     public function it_can_localize_any_url_based_on_the_given_locale_object()
     {
         $actual = $this->urlGenerator->set('/about/company-overview')->localize($this->locale)->get();
@@ -102,14 +103,14 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals('//usr:psw@test.de:81/en/my/file.php?a=b&b[]=2&b[]=3#myFragment', $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_default_value_on_extracting_empty_url()
     {
         $actual = $this->invokeMethod($this->urlGenerator, 'extract', [[], 'scheme', '//']);
         $this->assertEquals('//', $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_localize_url_which_already_contain_locale_keyword()
     {
         $english = $this->service->getLocale('en');
@@ -131,7 +132,7 @@ class UrlGeneratorTest extends TestCase
         $this->assertEquals($spanishUrl, $this->urlGenerator->localize($spanish)->get());
     }
 
-    /** @test */
+    #[Test]
     public function it_can_localize_url_which_already_contain_locale_keyword_at_custom_segment_index()
     {
         config(['i18n.locale_url_segment' => 3]);

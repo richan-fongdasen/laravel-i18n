@@ -2,6 +2,7 @@
 
 namespace RichanFongdasen\I18n\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use RichanFongdasen\I18n\Contracts\LocaleRepository;
 use RichanFongdasen\I18n\JsonRepository;
 use RichanFongdasen\I18n\Locale;
@@ -27,7 +28,7 @@ class LocaleRepositoryTest extends TestCase
         $this->repository = app(LocaleRepository::class);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_return_all_the_registered_locale()
     {
         $collection = $this->repository->all();
@@ -38,8 +39,8 @@ class LocaleRepositoryTest extends TestCase
             self::assertInstanceOf(Locale::class, $locale);
         }
     }
-    
-    /** @test */
+
+    #[Test]
     public function it_can_return_fallback_language_as_the_default_language()
     {
         config([
@@ -54,7 +55,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertEquals('de-DE', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_raises_exception_on_invalid_fallback_language()
     {
         $this->expectException(\ErrorException::class);
@@ -65,7 +66,7 @@ class LocaleRepositoryTest extends TestCase
         new JsonRepository;
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_locale_based_on_the_given_key()
     {
         $locale = $this->repository->get('es');
@@ -76,7 +77,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertEquals('es-ES', $locale->ietfCode);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_exact_locale_object_when_retrieved_using_different_key()
     {
         $locale1 = $this->repository->get('en');
@@ -85,7 +86,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertEquals($locale1, $locale2);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_retrieving_locale_using_invalid_key()
     {
         $locale = $this->repository->get('id-ID');
@@ -93,7 +94,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertNull($locale);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_all_locale_keys_grouped_by_language()
     {
         $expected = ['en', 'es', 'de'];
@@ -103,7 +104,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_retrieve_all_locale_keys_grouped_by_ietf_code()
     {
         $expected = ['en-US', 'es-ES', 'de-DE'];
@@ -113,7 +114,7 @@ class LocaleRepositoryTest extends TestCase
         self::assertEquals($expected, $actual);
     }
 
-    /** @test */
+    #[Test]
     public function it_returns_null_when_retrieving_all_locale_keys_grouped_by_invalid_key()
     {
         $actual = $this->repository->getKeys('title');

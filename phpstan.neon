@@ -6,12 +6,12 @@ includes:
 
 parameters:
     level: 8
-    checkMissingIterableValueType: false
-    checkGenericClassInNonGenericObjectType: false
     paths:
         - src
     ignoreErrors:
-        - '#Call to an undefined method RichanFongdasen\\I18n\\ServiceProvider::each\(\).#'
+        - identifier: missingType.iterableValue
+        - identifier: missingType.generics
+        - identifier: trait.unused
     banned_code:
         nodes:
             - type: Expr_FuncCall

@@ -40,7 +40,8 @@ trait Translatable
     public static function bootTranslatable(): void
     {
         static::addGlobalScope(new TranslationScope());
-        static::observe(app(I18nObserver::class));
+        static::retrieved(I18nObserver::class.'@retrieved');
+        static::saved(I18nObserver::class.'@saved');
 
         static::registerModelEvent('booted', static function (TranslatableModel $model) {
             $model->translateTo(App::getLocale());
